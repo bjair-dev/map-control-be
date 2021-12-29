@@ -105,6 +105,7 @@ import { UserChalengeFactory, UserChallengeStatic } from '../api/user_challenge/
 import { AnswerSurveyFactory, AnswerSurveyStatic } from '../api/answer_survey/models/answer.survey.model'
 import { MetricsFactory, MetricsStatic } from '../api/metrics/models/metrics.model'
 import { ActionFactory, ActionStatic } from '../api/action/models/action.model'
+import { ColorTypeFactory, ColorTypeStatic } from '../api/color_map/models/color_map.model.model'
 
 export class DataBase {
   private static _instance: DataBase
@@ -112,6 +113,8 @@ export class DataBase {
   private _config = config
   public user: UserStatic
   public admin: AdminStatic
+  public colorMap: ColorTypeStatic
+
   public token: TokenStatic
   public entry: EntryStatic
   public entryType: EntryTypeStatic
@@ -180,6 +183,7 @@ export class DataBase {
     this.question = QuestionFactory(this.sequelize)
     this.bankAccount = BankAccountFactory(this.sequelize)
     this.admin = AdminFactory(this.sequelize)
+    this.colorMap = ColorTypeFactory(this.sequelize)
     this.questionType = QuestionTypeFactory(this.sequelize)
     this.adminRoles = AdminRolesFactory(this.sequelize)
     this.global = GlobalFactory(this.sequelize)

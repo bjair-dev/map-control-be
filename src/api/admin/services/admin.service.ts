@@ -120,8 +120,8 @@ export const createAdminIntranetAndSendMailService = async ({
         banner:
           'https://images.pexels.com/photos/1321943/pexels-photo-1321943.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
       }),
-    })
-    return { admin: _admin } */
+    })*/
+    return { admin: _admin }
   } catch (err) {
     throw err
   }

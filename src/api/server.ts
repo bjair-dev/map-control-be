@@ -2,6 +2,8 @@ import express, { Application, Response, Request, NextFunction } from 'express'
 import { router as routerAuth } from './auth/routes/auth.routes'
 import { router as routerEntryType } from './entry_type/routes/entry.type.routes'
 import { router as routerEntry } from './entry/routes/entry.routes'
+import { router as routerColorType } from './color_map/routes/color_map.type.routes'
+
 import { router as routerQuestion } from './question/routes/question.routes'
 import { router as routerQuestionType } from './question_type/routes/question.type.routes'
 import { router as routerAdminRoles } from './admin/routes/admin.roles.routes'
@@ -130,12 +132,13 @@ export default class Server {
     this._router.use('/user-loan-link', deniedAccessAdmin, userRouterLoanLink)
 
     //*@USE ADMIN
-    this._router.use('/report', deniedAccessUser,routerReport)
-    
+    this._router.use('/report', deniedAccessUser, routerReport)
+
     this._router.use('/question', deniedAccessUser, routerQuestion)
     this._router.use('/question-type', deniedAccessUser, routerQuestionType)
     this._router.use('/roles', deniedAccessUser, routerAdminRoles)
     this._router.use('/admins', deniedAccessUser, routerAdmin)
+    this._router.use('/color', deniedAccessUser, routerColorType)
     this._router.use('/tips', deniedAccessUser, routerTip)
     this._router.use('/packages', deniedAccessUser, routerPackage)
     this._router.use('/packages-headers', deniedAccessUser, routerPackageHeader)
