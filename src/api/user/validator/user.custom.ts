@@ -3,6 +3,9 @@ import { findUserByEmailWithoutState
  } from '../../user/services/find'
 import { Request } from 'express'
 import { DataBase } from '../../../database'
+import { IToken } from '../../auth/passport/passport'
+import { UserAttributes } from '../models/user.model'
+import { validatePassPriv } from '../../admin/validator/admin.custom'
 
 export const VerifyCodeVerificationUser = async (code_verification: string, { req }: { req: Request | any } ): Promise<void> => {
   
@@ -35,4 +38,20 @@ export const notExistsUserId = async (id: string ): Promise<void> => {
   const user = await DataBase.instance.user.findByPk(id)
   if (!user) throw new Error(`¡No existe el id ${id}!`)
   
+}
+
+      
+export const SamePassword = async (new_password:string, { req }: { req: any }) => {
+  
+  const { userId } = req.user as IToken
+  
+  const user:UserAttributes | null = await DataBase.instance.user.findByPk(userId)
+  
+  const _validatePassPriv = validatePassPriv({
+    password:new_password,
+    salt: user?.salt,
+    hashedPass: user?.password,
+  })
+  if(_validatePassPriv)throw new Error('La nueva contraseña debe ser diferente a la actual')
+
 }

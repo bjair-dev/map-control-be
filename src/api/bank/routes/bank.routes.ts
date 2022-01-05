@@ -9,6 +9,7 @@ import {
   updateBankController,
   findOneBankController,
   updateBankImageController,
+  SeachBankController,
 } from '../controllers/bank.controller'
 
 /*
@@ -23,7 +24,7 @@ import {
 } from '../middlewares/bank.validator'
 
 export const router: Router = Router()
-
+router.get('/search/:q', SeachBankController)
 router.get('/', findBanksController)
 router.get('/:id', getOneBankValidator, findOneBankController)
 router.post('/', createBankValidator, addBankController)

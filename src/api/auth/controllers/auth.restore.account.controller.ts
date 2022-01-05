@@ -99,10 +99,12 @@ export const restoreAccountUserController = async (
        await sendMailAxios({
         template: template_create_user({
           names: name + ' ' + lastname,
+          code,
           banner:
             'https://images.pexels.com/photos/1043473/pexels-photo-1043473.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
         }),
-        title: `[MIYUNTA] Saludos , este es tu código de verificación ${code}`,
+        // title: `[MIYUNTA] Saludos , este es tu código de verificación ${code}`,
+        title:`[MIYUNTA] Código de verificación`,
         to: email!,
       })
       res.status(200).json(`¡Se te envió un código de verificación al correo ${email}!`)

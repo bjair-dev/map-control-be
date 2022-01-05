@@ -185,22 +185,25 @@ export const SummaryOfTheDayEntryController = async (
   const user = req.user as IToken
   try {
    
-    const amount_entry_entry = await getSumAmountByEntryTypeAndDateToday({
+    let amount_entry_entry = await getSumAmountByEntryTypeAndDateToday({
       userId:user.userId,
       entry_type_id:1,
       day,
       year,
       month
     })
-    
-    const amount_entry_egress = await getSumAmountByEntryTypeAndDateToday({
+    // console.log("amount_entry_entry",amount_entry_entry)
+    let amount_entry_egress = await getSumAmountByEntryTypeAndDateToday({
       userId:user.userId,
       entry_type_id:2,
       day,
       year,
       month
     })
-    if ((amount_entry_entry == 0 && amount_entry_egress == 0) || (amount_entry_entry == null && amount_entry_egress == null)) {
+    // console.log("amount_entry_entry",amount_entry_egress)
+    
+    if (amount_entry_entry == 0 && amount_entry_egress == 0 || amount_entry_entry == null && amount_entry_egress == null) {
+      // console.log("return")
       return res.status(200).json({
         savingsPercentage:0,
         entryPercentege:0,
@@ -214,6 +217,10 @@ export const SummaryOfTheDayEntryController = async (
       })
     }
     
+    amount_entry_egress = amount_entry_egress??0
+    amount_entry_entry = amount_entry_entry??0
+    
+    // console.log(amount_entry_entry,amount_entry_egress)
     const entryTotal = amount_entry_entry + amount_entry_egress;
     
     const entryPercentege = Number(((amount_entry_entry/entryTotal)*100).toFixed(1));

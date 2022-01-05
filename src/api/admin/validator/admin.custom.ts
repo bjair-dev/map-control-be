@@ -1,7 +1,9 @@
-import { Request } from 'express'
+// import { Request } from 'express'
 import { DataBase } from '../../../database'
 import { findAdminByEmail, findOneAdmin } from '../services/find/admin'
 import CryptoJS from 'crypto-js'
+// import { IToken } from '../../auth/passport/passport'
+// import { UserAttributes } from '../../user/models/user.model'
 
 export const existsEmailOfAdmin = async (email: string): Promise<void> => {
   const _email = await findAdminByEmail({ email })
@@ -51,7 +53,7 @@ export const  validatePasswordAdmin = async (current_password:string,
 }
 
 
-const validatePassPriv = ({
+export const validatePassPriv = ({
   password,
   salt,
   hashedPass,
@@ -78,3 +80,5 @@ export const RegexValidNewPassword = (new_password:string) => {
     return true
   }
 }
+
+

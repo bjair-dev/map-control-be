@@ -10,6 +10,7 @@ export interface PackageAttributes {
   videoId?: number
   challengeId?: number
   package_header_Id?: number
+  state?: boolean
 
   '$package_header.id$'?: number
 }
@@ -37,6 +38,11 @@ export function PackageFactory(sequelize: Sequelize): PackageStatic {
       created_by: {
         type: DataTypes.INTEGER,
         allowNull: false,
+      },
+      state: {
+        type: DataTypes.BOOLEAN,
+        defaultValue:true,
+        allowNull:false
       },
     },
     {

@@ -14,6 +14,7 @@ export const getPackagePendingServices = async ({
             
         where:{
             package_header_Id:package_header_Id,
+            state:true,
         },
         attributes:{
             exclude:['tipId','created'

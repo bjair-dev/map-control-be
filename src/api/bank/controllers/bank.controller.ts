@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import sequelize from 'sequelize'
 import createError from 'http-errors'
-import { findAllBank } from '../services/find/bank'
+import { findAllBank, SearchBank } from '../services/find/bank'
 import { findOneBank } from '../services/find/bank'
 import { deleteBank } from '../services/delete/bank'
 import { updateBank } from '../services/update/bank'
@@ -10,6 +10,31 @@ import { createBankService, updateBankImageService } from '../services/bank.serv
 import { removeFile } from '../../../shared/remove.file'
 import path from 'path'
 import config from '../../../config/environments'
+
+
+export const SeachBankController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    
+    const { q } = req.params
+    
+    const regex = q.split(" ").join("|")
+    
+    const list = await SearchBank({
+      regex,
+      order: [['id', 'DESC']],
+    })
+    res.status(200).json(list)
+  } catch (err: any) {
+    if (err instanceof sequelize.ValidationError) next(createError(400, err))
+    next(createError(404, err))
+  }
+}
+
+
 
 
 export const addBankController = async (req: Request, res: Response, next: NextFunction) => {

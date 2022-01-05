@@ -1,7 +1,7 @@
 import { body, query } from 'express-validator'
 import { allValidator } from '../../../shared/express.validator'
 import { RegexValidNewPassword } from '../../admin/validator/admin.custom'
-import { notExistsUserId, VerifyCodeVerificationUser, VerifyEmailUser } from '../validator/user.custom'
+import { notExistsUserId, SamePassword, VerifyCodeVerificationUser, VerifyEmailUser } from '../validator/user.custom'
 export const listUserIntranetValidator = [
   query('page')
     .isNumeric()
@@ -147,6 +147,7 @@ export const updatePasswordUserValidator = [
     .bail()
     .isLength({ min: 6, max: 16 })
     .withMessage('El minimo es 6 y el maximo es 16 letras')
+    .custom(SamePassword)
     .custom(RegexValidNewPassword),
     // .custom((pass:string )=>{
     //   const regex = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/)

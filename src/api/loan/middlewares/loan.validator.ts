@@ -2,10 +2,10 @@ import { body, query, param } from 'express-validator'
 // import { resizeImage } from '../../../helpers/sharp'
 import { allValidator } from '../../../shared/express.validator'
 // import { extractFile } from '../../../shared/express.satinizer'
-import {ExistsLoan, ExistsLoanType, VerifyLoanState} from '../validator/loan.custom'
+import { ExistsLoan, ExistsLoanType, VerifyLoanState } from '../validator/loan.custom'
 import { ExistsBank } from '../../bank/validator/bank.custom'
 export const createLoanValidator = [
-    body('description')
+  body('description')
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
@@ -15,8 +15,7 @@ export const createLoanValidator = [
     .bail()
     .isLength({ min: 0, max: 1000 })
     .withMessage('Tiene un minimo de 0 letras y maximo de 1000'),
-    
-    body('requirement')
+  body('requirement')
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
@@ -26,8 +25,7 @@ export const createLoanValidator = [
     .bail()
     .isLength({ min: 1, max: 200 })
     .withMessage('Tiene un minimo de 1 y maximo de 200 letras'),
-    
-    body('title')
+  body('title')
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
@@ -35,11 +33,11 @@ export const createLoanValidator = [
     .isEmpty()
     .withMessage('No puede ser vacio')
     .bail()
-    .isLength({ min:1,max: 150 })
+    .isLength({ min: 1, max: 150 })
     .withMessage('Tiene un minimo de 1 y maximo de 150 letras'),
-    // .optional({ nullable: true }),
-    
-    body('loan_type_id')
+  // .optional({ nullable: true }),
+
+  body('loan_type_id')
     .isNumeric()
     .withMessage('Tiene que ser numerico')
     .bail()
@@ -50,8 +48,8 @@ export const createLoanValidator = [
     .bail()
     .isLength({ min: 1, max: 2 })
     .withMessage('Tiene un minimo de 1 y maximo de 2 digitos'),
-    
-    body('bankId')
+
+  body('bankId')
     .isNumeric()
     .withMessage('Tiene que ser numerico')
     .bail()
@@ -62,31 +60,28 @@ export const createLoanValidator = [
     .bail()
     .isLength({ min: 1 })
     .withMessage('Tiene un minimo de 1 digito'),
-    
-    body('tea')
+
+  body('tea')
     .isNumeric()
     .withMessage('Tiene que ser numerico')
     .bail()
     .not()
     .isEmpty()
     .withMessage('No puede ser vacio')
-    .bail()
-    .isLength({ min: 2, max: 5 })
-    .withMessage('Tiene un minimo de 10 y maximo de 5 digitos'),
-    
-    body('url')
-    .optional({nullable:true})
+    .bail(),
+  // .isLength({ min: 1 })
+  // .withMessage('Tiene un minimo de 10 y maximo de 5 digitos'),
+
+  body('url')
+    .optional({ nullable: true })
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
     .isLength({ min: 0, max: 300 })
     .withMessage('Tiene un minimo de 5 letras y maximo de 300'),
 
- 
-    
-    
-    query('state')
-    .optional({nullable:true})
+  query('state')
+    .optional({ nullable: true })
     .isNumeric()
     .withMessage('Tiene que ser un numero')
     .bail()
@@ -97,43 +92,27 @@ export const createLoanValidator = [
     .bail()
     .isLength({ min: 0, max: 1 })
     .withMessage('Tiene un minimo de 1 y maximo de 1 numero'),
-    
+
   allValidator,
 ]
 
 export const deleteLoanValidator = [
-    param('id')
-      .isNumeric()
-      .withMessage('Tiene que ser numerico')
-      .bail()
-      .custom(ExistsLoan),
-    allValidator,
-  ]
+  param('id').isNumeric().withMessage('Tiene que ser numerico').bail().custom(ExistsLoan),
+  allValidator,
+]
 
-  export const getOneLoanValidator = [
-    param('id')
-      .isNumeric()
-      .withMessage('Tiene que ser numerico')
-      .bail()
-      .custom(ExistsLoan),
-    allValidator,
-  ]
-  export const findAllLoanValidator = [
-    query('page')
-    .isNumeric()
-    .withMessage('Tiene que ser numerico')
-    .bail()
-    .optional({nullable:true}),
-    query('state')
-    .isNumeric()
-    .withMessage('Tiene que ser numerico')
-    .bail()
-    .optional({nullable:true}),
-    allValidator
-  ]
-    
-  export const updateLoanValidator = [
-    param('id')
+export const getOneLoanValidator = [
+  param('id').isNumeric().withMessage('Tiene que ser numerico').bail().custom(ExistsLoan),
+  allValidator,
+]
+export const findAllLoanValidator = [
+  query('page').isNumeric().withMessage('Tiene que ser numerico').bail().optional({ nullable: true }),
+  query('state').isNumeric().withMessage('Tiene que ser numerico').bail().optional({ nullable: true }),
+  allValidator,
+]
+
+export const updateLoanValidator = [
+  param('id')
     .isNumeric()
     .withMessage('Tiene que ser numerico')
     .bail()
@@ -142,8 +121,8 @@ export const deleteLoanValidator = [
     .withMessage('No puede ser vacio')
     .bail()
     .custom(ExistsLoan),
-    
-    body('title')
+
+  body('title')
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
@@ -151,11 +130,11 @@ export const deleteLoanValidator = [
     .isEmpty()
     .withMessage('No puede ser vacio')
     .bail()
-    .isLength({ min:1,max: 150 })
+    .isLength({ min: 1, max: 150 })
     .withMessage('Tiene un minimo de 1 y maximo de 150 letras')
     .optional({ nullable: true }),
-    
-    body('requirement')
+
+  body('requirement')
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
@@ -166,9 +145,8 @@ export const deleteLoanValidator = [
     .isLength({ min: 1, max: 200 })
     .withMessage('Tiene un minimo de 1 y maximo de 200 letras')
     .optional({ nullable: true }),
-    
-    
-    body('description')
+
+  body('description')
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
@@ -179,9 +157,8 @@ export const deleteLoanValidator = [
     .isLength({ min: 0, max: 1000 })
     .withMessage('Tiene un minimo de 0 letras y maximo de 1000')
     .optional({ nullable: true }),
-    
-    
-    body('loan_type_id')
+
+  body('loan_type_id')
     .isNumeric()
     .withMessage('Tiene que ser numerico')
     .bail()
@@ -193,9 +170,8 @@ export const deleteLoanValidator = [
     .isLength({ min: 1, max: 2 })
     .withMessage('Tiene un minimo de 1 y maximo de 2 digitos')
     .optional({ nullable: true }),
-    
-    
-    body('bankId')
+
+  body('bankId')
     .isNumeric()
     .withMessage('Tiene que ser numerico')
     .bail()
@@ -207,9 +183,8 @@ export const deleteLoanValidator = [
     .isLength({ min: 1 })
     .withMessage('Tiene un minimo de 1 digito')
     .optional({ nullable: true }),
-    
-    
-    body('tea')
+
+  body('tea')
     .isNumeric()
     .withMessage('Tiene que ser numerico')
     .bail()
@@ -217,26 +192,21 @@ export const deleteLoanValidator = [
     .isEmpty()
     .withMessage('No puede ser vacio')
     .bail()
-    .isLength({ min: 2, max: 5 })
-    .withMessage('Tiene un minimo de 10 y maximo de 5 digitos')
+    // .isLength({ min: 2, max: 5 })
+    // .withMessage('Tiene un minimo de 10 y maximo de 5 digitos')
     .optional({ nullable: true }),
-    
-    
-    body('url')
-    .optional({nullable:true})
+
+  body('url')
+    .optional({ nullable: true })
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
     .isLength({ min: 0, max: 300 })
     .withMessage('Tiene un minimo de 5 letras y maximo de 300')
     .optional({ nullable: true }),
-    
 
- 
-    
-    
-    query('state')
-    .optional({nullable:true})
+  query('state')
+    .optional({ nullable: true })
     .isNumeric()
     .withMessage('Tiene que ser un numero')
     .bail()
@@ -248,22 +218,17 @@ export const deleteLoanValidator = [
     .isLength({ min: 0, max: 1 })
     .withMessage('Tiene un minimo de 1 y maximo de 1 numero')
     .optional({ nullable: true }),
-    
-    
+
   allValidator,
-  ]
+]
 
-
-  
-// export const updateBankValidator =[ 
+// export const updateBankValidator =[
 // param('id')
 // .isNumeric()
 // .withMessage('Tiene que ser numerico')
 // .bail()
 // .custom(ExistsBank)
 // .optional({ nullable: true }),
-
-
 // body('title')
 // .isString()
 // .withMessage('Tiene que ser un string')
@@ -275,8 +240,6 @@ export const deleteLoanValidator = [
 // .isLength({ min: 5, max: 200 })
 // .withMessage('Tiene un minimo de 10 letras y maximo de 200')
 // .optional({ nullable: true }),
-
-
 
 // body('name')
 // .isString()
@@ -290,8 +253,6 @@ export const deleteLoanValidator = [
 // .isLength({ min: 2, max: 200 })
 // .withMessage('Tiene un minimo de 10 letras y maximo de 200')
 // .optional({ nullable: true }),
-
-
 // body('num_atc')
 // .isNumeric()
 // .withMessage('Se require el numero de atención al cliente como valores numericos')
@@ -299,7 +260,6 @@ export const deleteLoanValidator = [
 // .isLength({ min: 9, max: 14 })
 // .withMessage('Se require un numero de Peru, 9 digitos - 14')
 // .optional({ nullable: true }),
-
 
 // body('num_whatsapp')
 // .isNumeric()
@@ -309,10 +269,8 @@ export const deleteLoanValidator = [
 // .withMessage('Se require un numero de Peru, 9 digitos - 14')
 // .optional({ nullable: true }),
 
-
 // allValidator,
 // ]
-
 
 // // //*@DESC update image of the question
 // export const updateBankImageValidator = [
@@ -321,11 +279,11 @@ export const deleteLoanValidator = [
 //   .withMessage('Se require un numero')
 //   .bail()
 //   .custom(ExistsBank),
-  
+
 //   body('image')
 //     .isString()
 //     .withMessage('Es una cadena de Base64')
-    
+
 //     .not()
 //     .isEmpty()
 //     .withMessage('No puede ser vacio')
@@ -356,4 +314,3 @@ export const deleteLoanValidator = [
 //     }),
 //   allValidator,
 // ]
-

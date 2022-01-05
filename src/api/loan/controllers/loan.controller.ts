@@ -4,9 +4,31 @@ import createError from 'http-errors'
 import { createLoan } from '../services/create/loan'
 import { IToken } from '../../auth/passport/passport'
 import { deleteLoan } from '../services/delete/loan'
-import { findOneLoan } from '../services/find/loan'
+import { findOneLoan, SearchLoan } from '../services/find/loan'
 import { updateLoan } from '../services/update/loan'
 import { findAllLoan } from '../services/find/loan'
+
+export const SeachLoanController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    
+    const { q } = req.params
+    
+    const regex = q.split(" ").join("|")
+    
+    const list = await SearchLoan({
+      regex,
+      order: [['id', 'DESC']],
+    })
+    res.status(200).json(list)
+  } catch (err: any) {
+    if (err instanceof sequelize.ValidationError) next(createError(400, err))
+    next(createError(404, err))
+  }
+}
 
 export const addLoanController = async (req: Request, res: Response, next: NextFunction) => {
   try {

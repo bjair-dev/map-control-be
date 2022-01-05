@@ -7,6 +7,7 @@ export interface LoanTypeAttributes {
   updated?: Date
   created_by?: number
   updated_by?: number
+  order?:string
 }
 export interface LoanTypeModel extends Model<LoanTypeAttributes>, LoanTypeAttributes {}
 export class LoanTypeCategory extends Model<LoanTypeModel, LoanTypeAttributes> {}
@@ -28,6 +29,11 @@ export function LoanTypeFactory(sequelize: Sequelize): LoanTypeStatic {
       type: {
         type: DataTypes.STRING(100),
         allowNull: true,
+      },
+      order: {
+        type: DataTypes.STRING(8),
+        allowNull: false,
+        defaultValue:'ASC'
       },
       created: {
         type: DataTypes.DATE,

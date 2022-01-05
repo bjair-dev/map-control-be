@@ -207,6 +207,7 @@ export const findAllPackage = async ({
       ],
       where: {
         '$package_header.id$': package_header_id,
+        state:true
       },
       order: [['id', 'DESC']],
     })
@@ -237,7 +238,7 @@ export const listOfTipToUse = async ({
         ],
         exclude: [
           'motivation',
-          'tip',
+          // 'tip',
           'created',
           'updated',
           'key',

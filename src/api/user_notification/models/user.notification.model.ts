@@ -9,6 +9,7 @@ export interface UserNotificationAttributes {
   state?: boolean
   status?:string
   notificationId?:number
+  "$notification.content_type$"?:number
 }
 export interface UserNotificationModel extends Model<UserNotificationAttributes>, UserNotificationAttributes {}
 export class UserNotification extends Model<UserNotificationModel, UserNotificationAttributes> {}

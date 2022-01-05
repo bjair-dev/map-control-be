@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken'
 import config from '../../../config/environments'
 import createError from 'http-errors'
-import {
-  // findUserByEmail,
-  findUserByEmailWithoutState,
-} from '../../user/services/find'
+import { 
+  // findUserByEmail, 
+  findUserByEmailWithoutState } from '../../user/services/find'
 import { amountIntUser, validateStatusUser } from '../../user/services/user.service'
 import { UserAttributes } from '../../user/models/user.model'
 import {
@@ -37,37 +36,38 @@ export const signInService = async ({
     // const user2: UserAttributes = await findUserByEmail({
     //   email,
     // })
-
-    const user: UserAttributes = await findUserByEmailWithoutState({
-      email,
+    
+    const user:UserAttributes = await findUserByEmailWithoutState({
+        email
     })
-
-    if (!user) throw createError(401, 'CORREO NO LOCALIZADO')
+    
+    if (!user) throw createError(401, 'El correo electrónico que ingresaste no está conectado a una cuenta')
+    // if (!user) throw createError(401, 'CORREO NO LOCALIZADO')
+    
     // if (!user) throw createError(401, 'No tiene permiso, porfavor ingrese nuevamente')
-
+    
+    
     const _validateStatusUser = validateStatusUser({
       estado: user.status,
       cantidadMinBloqueo: user.cantidad_min_bloqueado,
       horaBloqueo: user.hora_bloqueo,
     })
     if (_validateStatusUser) {
-      if (user.numIntentos == 3 && user.status == 'BIT') await desbloqueoTiempo({ userId: user.id })
+      if (user.numIntentos == 3 && user.status == 'BIT')
+        await desbloqueoTiempo({ userId: user.id })
       const _validatePassPriv = validatePassPriv({
         password,
         salt: user.salt,
         hashedPass: user.password,
       })
       if (_validatePassPriv) {
+        
         /*
           VALIDAR SI EL CORREO A SIDO CONFIRMADO  O ES UN CORREO VALIDO
-        */
-        // const validEmail = await findUserByEmail({ email })
-        if (user.state == false)
-          throw createError(
-            401,
-            'Falta activar tu correo , ve a la zona en donde ingresaras el código de verificacíon'
-          )
-
+        */ 
+          // const validEmail = await findUserByEmail({ email })
+        if(user.state == false) throw createError(401,'Falta activar tu correo , ve a la zona en donde ingresarás el código de verificación')
+          
         if (user.numIntentos! > 0) await desbloqueoUsuario({ userId: user.id })
         const [, _token] = await Promise.all([
           closeAllSession({ userId: user.id!, rol: 'user' }),
@@ -88,18 +88,19 @@ export const signInService = async ({
           cantidadMinBloq: user.cantidad_min_bloqueado,
           numIntentos: user.numIntentos,
         })
-        throw createError(401, 'No tiene permiso, porfavor ingrese nuevamente')
+        throw createError(401, 'No tiene permiso, por favor ingrese nuevamente')
       }
     } else {
       if (user.status == 'BI') {
-        throw createError(
-          401,
-          'El usuario esta bloqueado, ve a la sección de restablecer cuenta o cambio de contraseña'
-        )
+        throw createError(401, 'El usuario esta bloqueado, ve a la sección de restablecer cuenta o cambio de contraseña')
       }
       if (user.status == 'BIT') {
         var fechaActual: Date = new Date(user.hora_bloqueo!)
-        new Date(fechaActual.setTime(Number(fechaActual.getTime() + 60000 * user.cantidad_min_bloqueado!)))
+        new Date(
+          fechaActual.setTime(
+            Number(fechaActual.getTime() + 60000 * user.cantidad_min_bloqueado!)
+          )
+        )
         var diff = Math.abs(Number(fechaActual) - Number(new Date()))
 
         var minRestantes = Number(diff / 60000)
@@ -107,7 +108,16 @@ export const signInService = async ({
           Number((diff - minRestantes * 60000) / 1000) > 0
             ? Number((diff - minRestantes * 60000) / 1000).toFixed(0)
             : Number((diff - minRestantes * 60000) / 1000) * -1
-        throw createError(401, `Intentelo nuevamente en ${minRestantes} : ${segRestantes} minutos`)
+        
+        var segRestantesv2 = Math.round(Number("0."+minRestantes.toString().split(".")[1])*60) 
+        
+        throw createError(
+          401,
+          // `Intentelo nuevamente en ${minRestantes} : ${segRestantes} minutos`
+          // `Intentelo nuevamente en ${Math.floor(minRestantes)} minuto${Math.floor(minRestantes) != 1 ? 's':''} y ${minRestantes} ${segRestantesv2} segundo${Math.floor(Number(segRestantesv2)) != 1 ? 's':''}`
+          `Intentelo nuevamente en ${Math.floor(minRestantes) == 0 ? '':`${Math.floor(minRestantes)} minuto${Math.floor(minRestantes) != 1 ? 's':''} y `}${segRestantesv2} segundo${Math.floor(segRestantesv2) != 1 ? 's':''}`
+          
+        )
       }
     }
   } catch (err) {
@@ -146,7 +156,7 @@ export const signInAdminService = async ({
         state: true,
       },
     })
-    if (!admin) throw createError(401, 'No tiene permiso, porfavor ingrese nuevamente')
+    if (!admin) throw createError(401, 'No tiene permiso, por favor ingrese nuevamente')
 
     const _validateStatusAdmin = validateStatusAdmin({
       estado: admin!.status,
@@ -178,7 +188,7 @@ export const signInAdminService = async ({
           cantidadMinBloq: admin!.cantidad_min_bloqueado,
           numIntentos: admin!.numIntentos,
         })
-        throw createError(401, 'No tiene permiso, porfavor ingrese nuevamente')
+        throw createError(401, 'No tiene permiso, por favor ingrese nuevamente')
       }
     } else {
       if (admin!.status == 'BI') {
@@ -186,7 +196,11 @@ export const signInAdminService = async ({
       }
       if (admin!.status == 'BIT') {
         var fechaActual: Date = new Date(admin!.hora_bloqueo!)
-        new Date(fechaActual.setTime(Number(fechaActual.getTime() + 60000 * admin!.cantidad_min_bloqueado!)))
+        new Date(
+          fechaActual.setTime(
+            Number(fechaActual.getTime() + 60000 * admin!.cantidad_min_bloqueado!)
+          )
+        )
         var diff = Math.abs(Number(fechaActual) - Number(new Date()))
 
         var minRestantes = Number(diff / 60000)
@@ -194,7 +208,15 @@ export const signInAdminService = async ({
           Number((diff - minRestantes * 60000) / 1000) > 0
             ? Number((diff - minRestantes * 60000) / 1000).toFixed(0)
             : Number((diff - minRestantes * 60000) / 1000) * -1
-        throw createError(401, `Intentelo nuevamente en ${minRestantes} : ${segRestantes} minutos`)
+        
+        var segRestantesv2 = Math.round(Number("0."+minRestantes.toString().split(".")[1])*60) 
+
+        throw createError(
+          401,
+          // `Intentelo nuevamente en ${minRestantes} : ${segRestantes} minutos`
+          // `Intentelo nuevamente en ${Math.floor(minRestantes)} minuto${Math.floor(minRestantes) != 1 ? 's':''} y ${segRestantes} segundo${Math.floor(Number(segRestantes)) != 1 ? 's':''}`
+          `Intentelo nuevamente en ${Math.floor(minRestantes) == 0 ? '':`${Math.floor(minRestantes)} minuto${Math.floor(minRestantes) != 1 ? 's':''} y `}${segRestantesv2} segundo${Math.floor(segRestantesv2) != 1 ? 's':''}`
+        )
       }
     }
   } catch (err) {
@@ -206,14 +228,14 @@ export const signInSocialNetworkService = async ({
   userId,
   email,
   password,
-  number_of_sessions,
+  number_of_sessions
 }: {
   userId: number
   email: string
   password: string
   number_of_sessions: number
 }): Promise<any> => {
-  try {
+  try{
     const [, _token] = await Promise.all([
       closeAllSession({ userId: userId!, rol: 'user' }),
       createToken({

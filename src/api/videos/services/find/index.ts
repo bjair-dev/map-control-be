@@ -1,7 +1,7 @@
 import { DataBase } from '../../../../database'
 import { VideoAttributes } from '../../models/video.model'
 import { FindAttributeOptions } from 'sequelize/types'
-import {Op} from 'sequelize'
+import { Op } from 'sequelize'
 export const findAllVideos = async ({
   where,
   page,
@@ -53,60 +53,63 @@ export const findOneVideo = async ({
   }
 }
 
-
-export const FilterVideos = async (
-  id_videos:Array<number > 
-  ) => {
-    try {
-      
-      const videos = await DataBase.instance.video.findAll({
-        where:{
-          state:true,
-          id:{
-            [Op.in]:id_videos
-          }
+export const FilterVideos = async (id_videos: Array<number>) => {
+  try {
+    const videos = await DataBase.instance.video.findAll({
+      where: {
+        state: true,
+        id: {
+          [Op.in]: id_videos,
         },
-        include:[{
-          model:DataBase.instance.videoCategory,
-          attributes:{
-            exclude:['updated_by','created_by','updated','created']
-          }
-        }],
-        attributes:{
-          exclude:['size','created_by','updated_by','updated','created','key_video','size_video','key','video_category_id']
-        }
-      })
-      return videos
-      
-    } catch (error) {
-      throw error
-    }
+      },
+      include: [
+        {
+          model: DataBase.instance.videoCategory,
+          attributes: {
+            exclude: ['updated_by', 'created_by', 'updated', 'created'],
+          },
+        },
+      ],
+      attributes: {
+        exclude: [
+          'size',
+          'created_by',
+          'updated_by',
+          'updated',
+          'created',
+          'key_video',
+          'size_video',
+          'key',
+          'video_category_id',
+        ],
+      },
+      logging: console.log,
+    })
+    return videos
+  } catch (error) {
+    throw error
+  }
 }
 
 export const getFindIdsVideosd = async ({
   map_content_id_metrics,
-  video_category_id
-}:{
-  
-  map_content_id_metrics:any
-  video_category_id:number
-}
-  ):Promise<VideoAttributes[]> => {
-    try {
-      
-      const findIdsVideos:VideoAttributes[] = await DataBase.instance.video.findAll({
-        where:{
-          id:{
-            [Op.in]:map_content_id_metrics
-          },
-          video_category_id
+  video_category_id,
+}: {
+  map_content_id_metrics: any
+  video_category_id: number
+}): Promise<VideoAttributes[]> => {
+  try {
+    const findIdsVideos: VideoAttributes[] = await DataBase.instance.video.findAll({
+      where: {
+        id: {
+          [Op.in]: map_content_id_metrics,
         },
-        attributes:['id']
-      })
-      return findIdsVideos
-      
-    } catch (error) {
-      throw error
-    }
+        video_category_id,
+      },
+      attributes: ['id'],
+    })
+    return findIdsVideos
+  } catch (error) {
+    throw error
+  }
 }
-

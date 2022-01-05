@@ -1,8 +1,62 @@
 import { DataBase } from '../../../../database'
 import { LoanAttributes} from '../../models/loan.model'
 
-import { WhereOptions } from 'sequelize'
+import { Op, Order, WhereOptions } from 'sequelize'
 import { FindAttributeOptions } from 'sequelize/types'
+
+
+export const SearchLoan = async ({
+  regex,
+  order,
+}: {
+  regex?: string
+  order: Order
+}) => {
+  try {
+    const limit: number = 12
+    const loan = await DataBase.instance.loan.findAll({
+      where:{
+        state:true,
+        [Op.or]:{
+          id:{
+            [Op.regexp]:regex
+          },
+          description:{
+            [Op.regexp]:regex
+          },
+          title:{
+            [Op.regexp]:regex
+          },
+          tea:{
+            [Op.regexp]:regex
+          },
+          '$loan_type.type$': { [Op.regexp]:regex },
+          '$bank.name$': { [Op.regexp]:regex },
+          
+        }
+      },
+      include:[{
+        model:DataBase.instance.loanType,
+        attributes:['id','type'],
+        required:true,
+      },
+      {
+      model:DataBase.instance.bank,
+      attributes:['id','name'],
+      required:true,
+      }
+    ],
+      attributes:['title','description','tea','id','loan_type_id','bankId'],
+      order,
+      limit,
+      // logging:console.log
+    })
+    return loan
+  } catch (err) {
+    throw err
+  }
+}
+
 
 export const findAllLoan = async ({
     state,

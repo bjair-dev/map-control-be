@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { allValidator } from '../../../shared/express.validator'
 import { notExistsSurvey } from "../validator/answer.survey.custom";
 
@@ -26,4 +26,16 @@ export const createAnswerValidator = [
   ,
   allValidator
 ]
-  
+  //surveyId
+export const resultAnswerSurveyValidator = [
+  param('id')
+  .isNumeric().withMessage('Se require un numero')
+  .bail()
+  .custom(notExistsSurvey)
+  .not()
+  .isEmpty()
+  .withMessage('No puede ser vacio')
+  .bail()
+,
+allValidator
+]

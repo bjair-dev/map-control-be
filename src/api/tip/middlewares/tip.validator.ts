@@ -20,8 +20,8 @@ export const createTipValidator = [
     .isString()
     .withMessage('Tiene que se un tip')
     .bail()
-    .isLength({ max: 200 })
-    .withMessage('Tiene un maximo de 200'),
+    .isLength({ max: 500 })
+    .withMessage('Tiene un maximo de 500'),
   body('tip_category_id')
     .isNumeric()
     .withMessage('Se require una categoria')
@@ -31,8 +31,8 @@ export const createTipValidator = [
     .isString()
     .withMessage('Tiene que se una motivación')
     .bail()
-    .isLength({ max: 200 })
-    .withMessage('Tiene un maximo de 200'),
+    .isLength({ max: 500 })
+    .withMessage('Tiene un maximo de 500'),
   body('image')
     .isString()
     .withMessage('Es una cadena de Base64')
@@ -46,9 +46,7 @@ export const createTipValidator = [
     .withMessage('Tiene que ser una cadena de Base64')
     .custom(
       (file, { req }) =>
-        req.mimetype === 'image/jpeg' ||
-        req.mimetype === 'image/jpg' ||
-        req.mimetype === 'image/png'
+        req.mimetype === 'image/jpeg' || req.mimetype === 'image/jpg' || req.mimetype === 'image/png'
     )
     .withMessage('Solo se permiten formatos de imagen')
     .customSanitizer((image: string) => Buffer.from(image, 'base64'))
@@ -69,19 +67,11 @@ export const createTipValidator = [
   allValidator,
 ]
 export const deleteTipValidator = [
-  param('tipId')
-    .isNumeric()
-    .withMessage('Tiene que ser numerico')
-    .bail()
-    .custom(existsTip),
+  param('tipId').isNumeric().withMessage('Tiene que ser numerico').bail().custom(existsTip),
   allValidator,
 ]
 export const updateTipValidator = [
-  param('tipId')
-    .isNumeric()
-    .withMessage('Tiene que ser numerico')
-    .bail()
-    .custom(existsTip),
+  param('tipId').isNumeric().withMessage('Tiene que ser numerico').bail().custom(existsTip),
   body('tip_category_id')
     .isNumeric()
     .withMessage('Se require una categoria')
@@ -101,14 +91,14 @@ export const updateTipValidator = [
     .isString()
     .withMessage('Tiene que se un tip')
     .bail()
-    .isLength({ max: 200 })
-    .withMessage('Tiene un maximo de 200'),
+    .isLength({ max: 500 })
+    .withMessage('Tiene un maximo de 500'),
   body('motivation')
     .isString()
     .withMessage('Tiene que se una motivación')
     .bail()
-    .isLength({ max: 200 })
-    .withMessage('Tiene un maximo de 200'),
+    .isLength({ max: 500 })
+    .withMessage('Tiene un maximo de 500'),
   allValidator,
 ]
 //*@DESC update image of the question
@@ -127,9 +117,7 @@ export const updateImageTipValidator = [
     .withMessage('Tiene que ser una cadena de Base64')
     .custom(
       (file, { req }) =>
-        req.mimetype === 'image/jpeg' ||
-        req.mimetype === 'image/jpg' ||
-        req.mimetype === 'image/png'
+        req.mimetype === 'image/jpeg' || req.mimetype === 'image/jpg' || req.mimetype === 'image/png'
     )
     .withMessage('Solo se permiten formatos de imagen')
     .customSanitizer((image: string) => Buffer.from(image, 'base64'))
@@ -149,12 +137,7 @@ export const updateImageTipValidator = [
   allValidator,
 ]
 export const listTipsValidator = [
-  query('page')
-    .isNumeric()
-    .withMessage('Solo numero')
-    .bail()
-    .isInt({ min: 1 })
-    .withMessage('El nimimo es 1'),
+  query('page').isNumeric().withMessage('Solo numero').bail().isInt({ min: 1 }).withMessage('El nimimo es 1'),
   query('state').isBoolean().withMessage('Solo valores booleanos'),
   allValidator,
 ]
@@ -168,9 +151,7 @@ export const archivedOrUnArchivedTipValidator = [
     .custom(async (tipId: number, { req }: { req: any }) => {
       const question = await findOneTip({ id: tipId, state: !req.body.state })
       if (!question)
-        throw new Error(
-          'El tip no existe o esta en estado ' + (req.body.state ? 'activo' : 'archivado')
-        )
+        throw new Error('El tip no existe o esta en estado ' + (req.body.state ? 'activo' : 'archivado'))
     }),
   allValidator,
 ]

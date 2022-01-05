@@ -27,7 +27,11 @@ export const validateStatusAdmin = ({
     return true
   } else if (estado == 'BIT') {
     var horaBloqueoDato = new Date(horaBloqueo!)
-    new Date(horaBloqueoDato.setTime(Number(horaBloqueoDato.getTime() + 60000 * cantidadMinBloqueo!)))
+    new Date(
+      horaBloqueoDato.setTime(
+        Number(horaBloqueoDato.getTime() + 60000 * cantidadMinBloqueo!)
+      )
+    )
     if (horaBloqueoDato >= new Date()) {
       return false
     } else {
@@ -110,8 +114,7 @@ export const createAdminIntranetAndSendMailService = async ({
       admin,
       adminId,
     })
-    /* Descomentar aca cuando el sengrid este disponible */
-    /*    await sendMailAxios({
+    await sendMailAxios({
       title: 'Hola ' + _admin.name + ', tu nueva contraseña es:  ' + password,
       to: _admin.email!,
       template: template_create_admin({
@@ -120,7 +123,7 @@ export const createAdminIntranetAndSendMailService = async ({
         banner:
           'https://images.pexels.com/photos/1321943/pexels-photo-1321943.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
       }),
-    })*/
+    })
     return { admin: _admin }
   } catch (err) {
     throw err
@@ -150,22 +153,25 @@ export const ArchivedAndUnArchivedAdminService = async ({
   }
 }
 
-export const updatePasswordAdminIntranetService = async (new_password: string, userId: number) => {
+export const updatePasswordAdminIntranetService = async (new_password:string,userId:number) => {
   try {
+    
     const salt = CryptoJS.lib.WordArray.random(30)
     const hashpwd = CryptoJS.PBKDF2(new_password!, salt.toString(), {
       iterations: 10000,
       keySize: 10,
     })
-
+    
     return await updatePasswordAdmin({
-      where: {
-        id: userId,
+      where:{
+        id:userId
       },
-      updated_by: userId,
-      password: hashpwd.toString(),
-      salt: salt.toString(),
+      updated_by:userId,
+      password:hashpwd.toString(),
+      salt:salt.toString()
+      
     })
+   
   } catch (err) {
     throw err
   }

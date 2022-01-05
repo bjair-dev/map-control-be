@@ -1,9 +1,11 @@
 import { Router } from 'express'
+import { SeachUsersController } from '../../user/controllers/user.controller'
 import {
   archivedTipController,
   createTipController,
   deleteOneTipController,
   findAllTipsController,
+  SeachTipsController,
   updateImageTipServiceController,
   updateTipController,
 } from '../controllers/tip.controller'
@@ -17,6 +19,8 @@ import {
 } from '../middlewares/tip.validator'
 
 export const router: Router = Router()
+
+router.get('/search/:q', SeachTipsController)
 
 router.post('/', createTipValidator, createTipController)
 router.get('/', listTipsValidator, findAllTipsController)

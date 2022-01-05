@@ -4,9 +4,35 @@ import createError from 'http-errors'
 import { createTipService, updateImageTipService } from '../services/tip.service'
 import { IToken } from '../../auth/passport/passport'
 import { TipAttributes } from '../models/tip.model'
-import { findAllTips } from '../services/find'
+import { findAllTips, SearchTip } from '../services/find'
 import { updateTip } from '../services/update/index'
 import { deleteOneTip } from '../services/delete'
+
+
+
+export const SeachTipsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    
+    const { q } = req.params
+    
+    const regex = q.split(" ").join("|")
+    
+    const list = await SearchTip({
+      regex,
+      order: [['id', 'DESC']],
+    })
+    res.status(200).json(list)
+  } catch (err: any) {
+    if (err instanceof sequelize.ValidationError) next(createError(400, err))
+    next(createError(404, err))
+  }
+}
+
+
 
 export const createTipController = async (
   req: Request,

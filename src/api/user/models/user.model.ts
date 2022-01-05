@@ -33,6 +33,7 @@ export interface UserAttributes {
   
   device_id?:string
   origin?:string
+  terms_and_conditions?:boolean
 }
 export interface UserModel extends Model<UserAttributes>, UserAttributes {}
 export class User extends Model<UserModel, UserAttributes> {}
@@ -53,6 +54,11 @@ export function UserFactory(sequelize: Sequelize): UserStatic {
       },
       user_session_day:{
         type:DataTypes.NUMBER
+      },
+      terms_and_conditions:{
+        type:DataTypes.BOOLEAN,
+        defaultValue:false,
+        allowNull:false
       },
       date_user_session_day:{
         type:DataTypes.DATEONLY

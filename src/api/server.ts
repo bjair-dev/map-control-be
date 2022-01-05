@@ -2,8 +2,6 @@ import express, { Application, Response, Request, NextFunction } from 'express'
 import { router as routerAuth } from './auth/routes/auth.routes'
 import { router as routerEntryType } from './entry_type/routes/entry.type.routes'
 import { router as routerEntry } from './entry/routes/entry.routes'
-import { router as routerColorType } from './color_map/routes/color_map.type.routes'
-
 import { router as routerQuestion } from './question/routes/question.routes'
 import { router as routerQuestionType } from './question_type/routes/question.type.routes'
 import { router as routerAdminRoles } from './admin/routes/admin.roles.routes'
@@ -19,6 +17,8 @@ import { router as routerChallenge } from './challenge/routes/challenge.routes'
 import { router as routerQuestionCategory } from './question/routes/question.category.routes'
 import { router as routerTipCategory } from './tip/routers/tip.category.routes'
 import { router as routerUserIntranet } from './user/routes/user.intranet.routes'
+import { router as routerColorIntranet } from './color_map/routes/color_map.type.routes'
+
 import { router as routerUserAccount } from './user/routes/user.account.routes'
 
 import { router as routerUserQuestion } from './question/routes/question.user.routes'
@@ -53,6 +53,8 @@ import { router as userRouterLoanLink } from './loan/routes/user.loan.link.route
 import { router as routerAnswer } from './answer/routes/answer.routes'
 import { router as routerUserDevice } from './user/routes/user.device.routes'
 import { router as routerAnswerSurvey } from './answer_survey/routes/answer.survey.routes'
+import { router as routerAdminAnswerSurvey } from './answer_survey/routes/admin.answer.survey.routes'
+
 // import { router as routerUserMetrics } from './metrics/routes/'
 import { router as routerUserMetrics } from './metrics/routes/metrics.user.routes'
 import { router as routerUserMetricsAdmin } from './metrics/routes/metrics.routes'
@@ -85,12 +87,12 @@ export default class Server {
   middlewares(): void {
     this._app.use(cors({ credentials: true }))
     this._app.use(morgan('dev'))
-    this._app.use(express.json({ limit: '50mb' }))
+    this._app.use(express.json({ limit: '350mb' }))
     this._app.use(
       express.urlencoded({
-        limit: '50mb',
+        limit: '350mb',
         extended: true,
-        parameterLimit: 50000,
+        parameterLimit: 350000,
       })
     )
 
@@ -138,7 +140,6 @@ export default class Server {
     this._router.use('/question-type', deniedAccessUser, routerQuestionType)
     this._router.use('/roles', deniedAccessUser, routerAdminRoles)
     this._router.use('/admins', deniedAccessUser, routerAdmin)
-    this._router.use('/color', deniedAccessUser, routerColorType)
     this._router.use('/tips', deniedAccessUser, routerTip)
     this._router.use('/packages', deniedAccessUser, routerPackage)
     this._router.use('/packages-headers', deniedAccessUser, routerPackageHeader)
@@ -150,6 +151,7 @@ export default class Server {
     this._router.use('/tips-categories', deniedAccessUser, routerTipCategory)
     this._router.use('/videos-categories', deniedAccessUser, routerVideoCategory)
     this._router.use('/users-intranet', deniedAccessUser, routerUserIntranet)
+    this._router.use('/color', deniedAccessUser, routerColorIntranet)
 
     this._router.use('/surveys', deniedAccessUser, routerSurvey)
     this._router.use('/bank', deniedAccessUser, routerBank)
@@ -161,6 +163,7 @@ export default class Server {
     this._router.use('/entry-type-admin', deniedAccessUser, routerEntryTypeAdmin)
     this._router.use('/motivational-phrase-admin', deniedAccessUser, routerMotivationalPhraseAdmin)
     this._router.use('/metrics', deniedAccessUser, routerUserMetricsAdmin)
+    this._router.use('/admin-answer-survey', deniedAccessUser, routerAdminAnswerSurvey)
 
     // this._router.use('/user-package', deniedAccessUser, userPackageAdmin)
 

@@ -3,7 +3,11 @@ import { AdminAttributes } from '../../models/admin.model'
 import { WhereOptions } from 'sequelize'
 import { FindAttributeOptions } from 'sequelize/types'
 
-export const findAdminByEmail = async ({ email }: { email: string }): Promise<AdminAttributes | null> => {
+export const findAdminByEmail = async ({
+  email,
+}: {
+  email: string
+}): Promise<AdminAttributes | null> => {
   try {
     const admin = await DataBase.instance.admin.findOne({
       where: {

@@ -105,6 +105,8 @@ import { UserChalengeFactory, UserChallengeStatic } from '../api/user_challenge/
 import { AnswerSurveyFactory, AnswerSurveyStatic } from '../api/answer_survey/models/answer.survey.model'
 import { MetricsFactory, MetricsStatic } from '../api/metrics/models/metrics.model'
 import { ActionFactory, ActionStatic } from '../api/action/models/action.model'
+import { answerSurveyHasManyUser } from './associations/answer.survey'
+import { notificationHasManyUserNotification } from './associations/notification'
 import { ColorTypeFactory, ColorTypeStatic } from '../api/color_map/models/color_map.model.model'
 
 export class DataBase {
@@ -113,10 +115,9 @@ export class DataBase {
   private _config = config
   public user: UserStatic
   public admin: AdminStatic
-  public colorMap: ColorTypeStatic
-
   public token: TokenStatic
   public entry: EntryStatic
+  public colorMap: ColorTypeStatic
   public entryType: EntryTypeStatic
   public question: QuestionStatic
   public bankAccount: BankAccountStatic
@@ -181,9 +182,9 @@ export class DataBase {
     this.entry = EntryFactory(this.sequelize)
     this.entryType = EntryTypeFactory(this.sequelize)
     this.question = QuestionFactory(this.sequelize)
+    this.colorMap = ColorTypeFactory(this.sequelize)
     this.bankAccount = BankAccountFactory(this.sequelize)
     this.admin = AdminFactory(this.sequelize)
-    this.colorMap = ColorTypeFactory(this.sequelize)
     this.questionType = QuestionTypeFactory(this.sequelize)
     this.adminRoles = AdminRolesFactory(this.sequelize)
     this.global = GlobalFactory(this.sequelize)
@@ -353,6 +354,14 @@ export class DataBase {
     userHasManyChallenge({
       user: this.user,
       user_challenge: this.userChallenge,
+    })
+    answerSurveyHasManyUser({
+      answerSurvey: this.answerSurvey,
+      user: this.user,
+    })
+    notificationHasManyUserNotification({
+      notification: this.notification,
+      userNotification: this.userNotification,
     })
   }
 }

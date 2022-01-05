@@ -6,4 +6,5 @@ export interface ITemplate {
   redirect_buttom?: string
   names?: string
   banner?: string
+  code?:string
 }

@@ -1,5 +1,9 @@
 import { Router } from 'express'
-import { ActiveAccountUserValidator, EmailUserValidator, newPasswordAndCodeValidator } from '../../user/middlewares/user.validator'
+import {
+  ActiveAccountUserValidator,
+  EmailUserValidator,
+  newPasswordAndCodeValidator,
+} from '../../user/middlewares/user.validator'
 // import { VerifyEmailUser } from '../../user/validator/user.custom'
 import { ActiveAccountUserController } from '../controllers/auth.active.account.controller'
 import {
@@ -11,8 +15,13 @@ import {
   // signOutUserController,
   signUpAdminController,
   signUpController,
+  validarEmailUser,
+  signInSocialNetworkControllerWithoutValidation,
 } from '../controllers/auth.controller'
-import { restoreAccountUserController, sendCodeVerificationForRestoreAccountUserController } from '../controllers/auth.restore.account.controller'
+import {
+  restoreAccountUserController,
+  sendCodeVerificationForRestoreAccountUserController,
+} from '../controllers/auth.restore.account.controller'
 import {
   signinAdminValidator,
   signinValidator,
@@ -23,18 +32,14 @@ import {
 
 export const router: Router = Router()
 
-
-
 router.post('/signup', signupValidator, signUpController)
 router.post('/signin', signinValidator, signInController)
 router.post('/signin-google', googleSignInController)
 router.post('/signup-social-network', signInSocialNetworkController)
+router.post('/validate-user', validarEmailUser)
+router.post('/singup-social-network-user', signInSocialNetworkControllerWithoutValidation)
 
-
-
-
-router.get('/signout',signoutValidator,signOutController)
-
+router.get('/signout', signoutValidator, signOutController)
 
 //* session admin!
 
@@ -42,11 +47,6 @@ router.get('/signout',signoutValidator,signOutController)
 // router.post('/admin-signup', signinAdminValidator, signUpAdminController)
 router.post('/admin-signin', signupAdminValidator, signInAdminController)
 
-
-
-router.post('/sendcodeverification',EmailUserValidator, sendCodeVerificationForRestoreAccountUserController)
+router.post('/sendcodeverification', EmailUserValidator, sendCodeVerificationForRestoreAccountUserController)
 router.post('/active/verifycode', ActiveAccountUserValidator, ActiveAccountUserController)
-router.post('/restore',newPasswordAndCodeValidator ,restoreAccountUserController)
-
-
-
+router.post('/restore', newPasswordAndCodeValidator, restoreAccountUserController)

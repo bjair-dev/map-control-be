@@ -1,16 +1,18 @@
 import { DataBase } from '../../../../database'
 import { LoanAttributes} from '../../models/loan.model'
 
-import { WhereOptions } from 'sequelize'
+import { Order, WhereOptions } from 'sequelize'
 import { FindAttributeOptions } from 'sequelize/types'
 
 
 export const findAllLoanBank = async ({
     where,
     attributes,
+    order
   }: {
     where: WhereOptions<LoanAttributes>
     attributes?: FindAttributeOptions
+    order?: Order
   }) => {
     try {
       const loan = await DataBase.instance.loan.findAll({
@@ -21,7 +23,8 @@ export const findAllLoanBank = async ({
           attributes:{
             exclude:['updated','created_by','updated_by','size','key']
         }
-        }]
+        }],
+        order,
       })
     //   if (loan) return loan.get({ plain: true })
       return loan

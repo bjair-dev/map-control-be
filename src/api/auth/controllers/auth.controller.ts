@@ -2,10 +2,16 @@ import sequelize from 'sequelize'
 import createError from 'http-errors'
 
 import { NextFunction, Request, Response } from 'express'
-import { createUserAndSendCodeVerificationToMail, createNewUser
-  // , createUserAndSendMail 
+import {
+  createUserAndSendCodeVerificationToMail,
+  createNewUser,
+  // , createUserAndSendMail
 } from '../../user/services/user.service'
-import { signInAdminService, signInService, signInSocialNetworkService } from '../../token/services/token.service'
+import {
+  signInAdminService,
+  signInService,
+  signInSocialNetworkService,
+} from '../../token/services/token.service'
 import { googleSignInService } from '../services/auth.service'
 import { createAdminAndSendMail } from '../../admin/services/admin.service'
 import rn from 'random-number'
@@ -15,7 +21,7 @@ import { findTokenByUUID } from '../../token/services/find'
 import { closeAllSession } from '../../token/services/update'
 import config from '../../../config/environments/index'
 import jwt from 'jsonwebtoken'
-import { findUserByEmailWithoutState } from '../../user/services/find/index';
+import { findUserByEmailWithoutState } from '../../user/services/find/index'
 
 //*@DESC  Signup of users with local strategy
 // export const signUpController = async (req: Request, res: Response, next: NextFunction) => {
@@ -30,7 +36,6 @@ import { findUserByEmailWithoutState } from '../../user/services/find/index';
 // }
 export const signUpController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    
     const {
       name,
       lastname,
@@ -39,26 +44,26 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
       sexo,
       password,
       dni,
-      
-      date_of_birth
-  } =  req.body
-      
+
+      date_of_birth,
+    } = req.body
+
     enum opt {
       max = 9998,
-      min = 1001
+      min = 1001,
     }
-    
+
     // const code_verification = Math.floor(
     //   Math.random() * (opt.max - opt.min + 1) + opt.min
     // ).toString()
-  
+
     const gen = rn.generator({
-      min: opt.min
-    , max:  opt.max
-    , integer: true
+      min: opt.min,
+      max: opt.max,
+      integer: true,
     })
     const code = gen().toString()
-    
+
     await createUserAndSendCodeVerificationToMail({
       name,
       lastname,
@@ -67,11 +72,11 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
       sexo,
       password,
       dni,
-      code_verification:code,
+      code_verification: code,
       date_of_birth,
-      state:false
+      state: false,
     })
-    
+
     res.status(200).json('¡usuario creado , se te envio un código de verificación a tu correo !')
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err))
@@ -79,7 +84,6 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
     next(createError(404, err))
   }
 }
-
 
 interface ISignIn {
   email: string
@@ -99,26 +103,24 @@ export const signInController = async (req: Request, res: Response, next: NextFu
 
 export const signOutController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    
     // const parametros:any = req
     const opts = {
       // token: req.headers.authorization?.split(' ')[1],
       secretOrKey: config.SECRET_HIDDEN_KEY,
     }
-    
-    const extractToken =req.headers.authorization?.split(' ')[1] 
-    
-    const data_values:any = await new Promise((resolve,reject)=>{
-      jwt.verify(extractToken as string,opts.secretOrKey as string,(err,data)=>{
-        if(err) reject(err)
+
+    const extractToken = req.headers.authorization?.split(' ')[1]
+
+    const data_values: any = await new Promise((resolve, reject) => {
+      jwt.verify(extractToken as string, opts.secretOrKey as string, (err, data) => {
+        if (err) reject(err)
         resolve(data)
       })
     })
     const token: TokenAttributes = await findTokenByUUID({ uuid: data_values?._id })
     await closeAllSession({ userId: token.userId as number, rol: token.rol as string })
-    
-    res.status(200).json({signout:true})
-    
+
+    res.status(200).json({ signout: true })
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err))
     next(createError(404, err))
@@ -159,17 +161,7 @@ export const signInAdminController = async (req: Request, res: Response, next: N
 //*@DESC Signin of social networks
 export const signInSocialNetworkController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const {
-      name,
-      lastname,
-      email,
-      cellphone,
-      sexo,
-      password,
-      dni,
-      date_of_birth,
-      origin
-    } =  req.body
+    const { name, lastname, email, cellphone, sexo, password, dni, date_of_birth, origin } = req.body
     // res.status(200).json({
     //   name,
     //   lastname,
@@ -182,24 +174,24 @@ export const signInSocialNetworkController = async (req: Request, res: Response,
     // })
     enum opt {
       max = 9998,
-      min = 1001
+      min = 1001,
     }
 
     const gen = rn.generator({
       min: opt.min,
-      max:  opt.max,
-      integer: true
+      max: opt.max,
+      integer: true,
     })
     // Validar si el correo ya tiene una cuenta ?
-    const userExisted = await findUserByEmailWithoutState({email});
-    console.log('usuario existe',userExisted)
-    if(userExisted){
+    const userExisted = await findUserByEmailWithoutState({ email })
+    console.log('usuario existe', userExisted)
+    if (userExisted) {
       let userId = userExisted.id as number
       let number_of_sessions = userExisted.number_of_sessions as number
 
-      const jwt = await signInSocialNetworkService({userId, email, password, number_of_sessions })
+      const jwt = await signInSocialNetworkService({ userId, email, password, number_of_sessions })
       res.status(200).json(jwt)
-    }else{
+    } else {
       var user = await createNewUser({
         name,
         lastname,
@@ -209,19 +201,74 @@ export const signInSocialNetworkController = async (req: Request, res: Response,
         password,
         dni,
         date_of_birth,
-        state:false,
-        origin
-      });
-  
+        state: true,
+        origin,
+      })
+
       let userId = user.id as number
       let number_of_sessions = user.number_of_sessions as number
-      const jwt = await signInSocialNetworkService({userId, email, password, number_of_sessions })
+      const jwt = await signInSocialNetworkService({ userId, email, password, number_of_sessions })
       res.status(200).json(jwt)
     }
+  } catch (err: any) {
+    next(createError(404, err))
+  }
+}
 
-    
+export const validarEmailUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email, password } = req.body
+    const userExisted = await findUserByEmailWithoutState({ email })
+    console.log('usuario existe', userExisted)
+    if (userExisted) {
+      let userId = userExisted.id as number
+      let number_of_sessions = userExisted.number_of_sessions as number
 
-  }catch(err: any){
+      const jwt = await signInSocialNetworkService({ userId, email, password, number_of_sessions })
+      res.status(200).json(jwt)
+    } else {
+      res.status(200).json(null)
+    }
+  } catch (err: any) {
+    next(createError(404, err))
+  }
+}
+
+export const signInSocialNetworkControllerWithoutValidation = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { name, lastname, email, cellphone, sexo, password, dni, date_of_birth, origin } = req.body
+    enum opt {
+      max = 9998,
+      min = 1001,
+    }
+
+    const gen = rn.generator({
+      min: opt.min,
+      max: opt.max,
+      integer: true,
+    })
+    // Validar si el correo ya tiene una cuenta ?
+    var user = await createNewUser({
+      name,
+      lastname,
+      email,
+      cellphone,
+      sexo,
+      password,
+      dni,
+      date_of_birth,
+      state: true,
+      origin,
+    })
+    let userId = user.id as number
+    let number_of_sessions = user.number_of_sessions as number
+    const jwt = await signInSocialNetworkService({ userId, email, password, number_of_sessions })
+    res.status(200).json(jwt)
+  } catch (err: any) {
     next(createError(404, err))
   }
 }

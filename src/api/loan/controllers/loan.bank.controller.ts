@@ -11,14 +11,14 @@ export const findAllLoanBankController = async (req: Request, res: Response, nex
       const { id } = req.params
       
       const loanType = await findOneLoanType({where:{id}})
-      
       const loanBanks = await findAllLoanBank({
         where: {
             loan_type_id:Number(id)
         },
         attributes:{
             exclude:['updated','created_by','updated_by','loan_type_id','bankId']
-        }
+        },
+        order:[['tea',loanType?.order as string]]
         // attributes: ['id','description','url','tea','state','loan_type_id','bankId','title','requirement','created','updated'],
       })
       

@@ -827,7 +827,6 @@ lang="en" xml:lang="en" style="min-height: 100%; background-color: #fff;" xml:la
 }
 export const template_create_user = (vars: ITemplate) => {
   return `
-  
   <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
   <html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/xhtml"
   lang="en" xml:lang="en" style="min-height: 100%; background-color: #fff;" xml:lang="en">
@@ -1250,15 +1249,11 @@ export const template_create_user = (vars: ITemplate) => {
                                 <th style="text-align: center;font-family: Chronicle,Georgia,Times,Times New Roman,serif; font-size: 15px; font-weight: 400; line-height: 1.75em; margin: 0; padding: 0;"
                                 align="left">
                                 <h1 class="text-center serif small-text-left" style="text-align: center;color: #25368c; -webkit-hyphens: none; font-family: rubik; font-size: 35px; font-weight: bold; hyphens: none; letter-spacing: .02em; line-height: 1.1em; word-wrap: normal; margin: 0; padding: 0;"
-                                align="center">Hola! ${vars.names}</h1>
+                                align="center">Hola!</h1>
   
                                   <h5 class="text-center serif small-text-left" style="-webkit-hyphens: none; color: inherit; font-family: rubik;
-                                  font-size: 15px; font-weight: 400; hyphens: none; letter-spacing: .02em; line-height: 1.1em; word-wrap: normal; "
-                                  align="center">Tu código de verificación es:</h5>
-                                    <!-- AQUI ESTA EL CODIGO DE VERIFICACION -->
-                                  <h1 class="text-center serif small-text-left" style="-webkit-hyphens: none; color: inherit; font-family: rubik;
-                                  font-size: 45px; font-weight: 400; hyphens: none; letter-spacing: .02em; line-height: 1.1em; word-wrap: normal; letter-spacing: 0.5em;"
-                                  align="center">${vars.code}</h1>
+                                  font-size: 25px; font-weight: 400; hyphens: none; letter-spacing: .02em; line-height: 1.1em; word-wrap: normal; margin: 0; padding: 0;"
+                                  align="center">MiYunta te da la bienvenida ${vars.names} este es tu primer paso de un gran cambio</h5>
                                 </th>
                               </tr>
                             </table>
@@ -1597,5 +1592,5 @@ export const template_create_user = (vars: ITemplate) => {
     </body>
   
   </html>
-  `
+    `
 }
