@@ -10,11 +10,7 @@ import {
 import { findOneAdmin, findAllAdmin } from '../services/find/admin'
 import { updateAdmin } from '../services/update/admin'
 
-export const createAdminIntranetController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const createAdminIntranetController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
     const admin = await createAdminIntranetAndSendMailService({
@@ -28,11 +24,7 @@ export const createAdminIntranetController = async (
     next(createError(404, err))
   }
 }
-export const adminProfileController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const adminProfileController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
     const admin = await findOneAdmin({
@@ -48,27 +40,14 @@ export const adminProfileController = async (
     next(createError(404, err))
   }
 }
-export const findAllAdminController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const findAllAdminController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const list = await findAllAdmin({
       page: Number(req.query.page),
       where: {
         state: Number(req.query.state),
       },
-      attributes: [
-        'id',
-        'name',
-        'lastname',
-        'email',
-        'cellphone',
-        'path',
-        'created',
-        'updated',
-      ],
+      attributes: ['id', 'name', 'lastname', 'email', 'cellphone', 'path', 'created', 'updated'],
     })
     res.status(200).json(list)
   } catch (err: any) {
@@ -97,11 +76,7 @@ export const ArchivedAndUnArchivedAdminController = async (
     next(createError(404, err))
   }
 }
-export const updateAdminIntranetController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const updateAdminIntranetController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
     await updateAdmin({
@@ -112,7 +87,8 @@ export const updateAdminIntranetController = async (
       name: req.body.name,
       lastname: req.body.lastname,
       cellphone: req.body.cellphone,
-      admin_rol_id: req.body.admin_rol_id,
+      /*       admin_rol_id: req.body.admin_rol_id,
+       */
     })
 
     res.status(200).json('Se actualizo el admin')
@@ -123,11 +99,7 @@ export const updateAdminIntranetController = async (
   }
 }
 //!Por implementar
-export const updateAdminController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const updateAdminController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
     await updateAdmin({
@@ -154,12 +126,11 @@ export const updatePasswordAdminIntranetController = async (
   next: NextFunction
 ) => {
   try {
-    
     const user = req.user as IToken
     const { new_password } = req.body
 
-    await updatePasswordAdminIntranetService(new_password,user.userId)
-    
+    await updatePasswordAdminIntranetService(new_password, user.userId)
+
     res.status(200).json('Se actualizo el admin')
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err))
