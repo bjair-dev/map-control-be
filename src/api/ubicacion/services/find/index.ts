@@ -1,15 +1,15 @@
 import { FindAttributeOptions, WhereOptions } from 'sequelize/types'
 import { DataBase } from '../../../../database'
-import { ColorTypeAttributes } from '../../models/color_map.model.model'
-export const findOneColor = async ({
+import { UbicacionTypeAttributes } from '../../models/ubicacion.model.model'
+export const findOneUbicacion = async ({
   where,
   attributes,
 }: {
-  where?: WhereOptions<ColorTypeAttributes>
+  where?: WhereOptions<UbicacionTypeAttributes>
   attributes?: FindAttributeOptions
 }) => {
   try {
-    const role = await await DataBase.instance.colorMap.findOne({
+    const role = await await DataBase.instance.ubicacion.findOne({
       where,
       attributes,
     })
@@ -19,9 +19,9 @@ export const findOneColor = async ({
     throw err
   }
 }
-export const findAllColors = async () => {
+export const findAllUbicacion = async () => {
   try {
-    return await DataBase.instance.colorMap.findAll()
+    return await DataBase.instance.ubicacion.findAll()
   } catch (err) {
     throw err
   }

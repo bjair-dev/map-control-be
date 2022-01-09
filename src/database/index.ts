@@ -108,6 +108,7 @@ import { ActionFactory, ActionStatic } from '../api/action/models/action.model'
 import { answerSurveyHasManyUser } from './associations/answer.survey'
 import { notificationHasManyUserNotification } from './associations/notification'
 import { ColorTypeFactory, ColorTypeStatic } from '../api/color_map/models/color_map.model.model'
+import { UbicacionTypeFactory, UbicacionTypeStatic } from '../api/ubicacion/models/ubicacion.model.model'
 
 export class DataBase {
   private static _instance: DataBase
@@ -118,6 +119,7 @@ export class DataBase {
   public token: TokenStatic
   public entry: EntryStatic
   public colorMap: ColorTypeStatic
+  public ubicacion: UbicacionTypeStatic
   public entryType: EntryTypeStatic
   public question: QuestionStatic
   public bankAccount: BankAccountStatic
@@ -183,6 +185,7 @@ export class DataBase {
     this.entryType = EntryTypeFactory(this.sequelize)
     this.question = QuestionFactory(this.sequelize)
     this.colorMap = ColorTypeFactory(this.sequelize)
+    this.ubicacion = UbicacionTypeFactory(this.sequelize)
     this.bankAccount = BankAccountFactory(this.sequelize)
     this.admin = AdminFactory(this.sequelize)
     this.questionType = QuestionTypeFactory(this.sequelize)

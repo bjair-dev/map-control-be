@@ -1,11 +1,11 @@
 import sequelize from 'sequelize'
 import createError from 'http-errors'
 import { Response, Request, NextFunction } from 'express'
-import { findAllColors } from '../services/find'
+import { findAllUbicacion } from '../services/find'
 
-export const findAllColorTypeController = async (req: Request, res: Response, next: NextFunction) => {
+export const findAllUbicacionTypeController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const roles = await findAllColors()
+    const roles = await findAllUbicacion()
     res.status(200).json(roles)
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err))
