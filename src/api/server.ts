@@ -18,7 +18,8 @@ import { router as routerQuestionCategory } from './question/routes/question.cat
 import { router as routerTipCategory } from './tip/routers/tip.category.routes'
 import { router as routerUserIntranet } from './user/routes/user.intranet.routes'
 import { router as routerColorIntranet } from './color_map/routes/color_map.type.routes'
-import { router as routerUbicacionIntranet } from './ubicacion/routes/ubicacion.type.routes'
+import { router as routerDepartamentoIntranet } from './ubicacion/routes/departamento.type.routes'
+import { router as routerProvinciaIntranet } from './ubicacion/routes/provincia.type.routes'
 
 import { router as routerUserAccount } from './user/routes/user.account.routes'
 
@@ -153,7 +154,8 @@ export default class Server {
     this._router.use('/videos-categories', deniedAccessUser, routerVideoCategory)
     this._router.use('/users-intranet', deniedAccessUser, routerUserIntranet)
     this._router.use('/color', deniedAccessUser, routerColorIntranet)
-    this._router.use('/ubicacion', deniedAccessUser, routerUbicacionIntranet)
+    this._router.use('/departamento', deniedAccessUser, routerDepartamentoIntranet)
+    this._router.use('/provincia', deniedAccessUser, routerProvinciaIntranet)
 
     this._router.use('/surveys', deniedAccessUser, routerSurvey)
     this._router.use('/bank', deniedAccessUser, routerBank)
