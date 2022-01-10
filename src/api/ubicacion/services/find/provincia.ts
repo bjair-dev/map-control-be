@@ -53,7 +53,7 @@ export const findAllProvincia = async ({ region_id }: { region_id: number }) => 
       where: {
         $region_id$: region_id,
       },
-      order: [['id', 'DESC']],
+      order: [['id', 'ASC']],
     })
     return _prov
   } catch (err) {
