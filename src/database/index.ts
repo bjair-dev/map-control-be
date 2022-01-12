@@ -110,7 +110,11 @@ import { notificationHasManyUserNotification } from './associations/notification
 import { ColorTypeFactory, ColorTypeStatic } from '../api/color_map/models/color_map.model.model'
 import { DepartamentoTypeFactory, DepartamentoTypeStatic } from '../api/ubicacion/models/departamento.model'
 import { ProvinciaTypeFactory, ProvinciaStatic } from '../api/ubicacion/models/provincia.model'
+import { DistritoTypeFactory, DistritoStatic } from '../api/ubicacion/models/distrito.model'
+import { NoticiaTypeFactory, NoticiaStatic } from '../api/ubicacion/models/distrito.model'
+
 import { provinciaHasManyDepartamento } from './associations/provincia'
+import { DistritoHasManyProvincia } from './associations/distrito'
 
 export class DataBase {
   private static _instance: DataBase
@@ -123,6 +127,9 @@ export class DataBase {
   public colorMap: ColorTypeStatic
   public departamento: DepartamentoTypeStatic
   public provincia: ProvinciaStatic
+  public distrito: DistritoStatic
+  public noticia: NoticiaStatic
+
   public entryType: EntryTypeStatic
   public question: QuestionStatic
   public bankAccount: BankAccountStatic
@@ -190,6 +197,8 @@ export class DataBase {
     this.colorMap = ColorTypeFactory(this.sequelize)
     this.departamento = DepartamentoTypeFactory(this.sequelize)
     this.provincia = ProvinciaTypeFactory(this.sequelize)
+    this.distrito = DistritoTypeFactory(this.sequelize)
+    this.noticia = NoticiaTypeFactory(this.sequelize)
     this.bankAccount = BankAccountFactory(this.sequelize)
     this.admin = AdminFactory(this.sequelize)
     this.questionType = QuestionTypeFactory(this.sequelize)
@@ -291,6 +300,10 @@ export class DataBase {
     provinciaHasManyDepartamento({
       departamento: this.departamento,
       provincia: this.provincia,
+    })
+    DistritoHasManyProvincia({
+      provincia: this.provincia,
+      distrito: this.distrito,
     })
     contentTypeHasManyPackageHeader({
       contentType: this.packageContentType,

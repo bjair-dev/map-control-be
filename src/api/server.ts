@@ -20,6 +20,7 @@ import { router as routerUserIntranet } from './user/routes/user.intranet.routes
 import { router as routerColorIntranet } from './color_map/routes/color_map.type.routes'
 import { router as routerDepartamentoIntranet } from './ubicacion/routes/departamento.type.routes'
 import { router as routerProvinciaIntranet } from './ubicacion/routes/provincia.type.routes'
+import { router as routerDistritoIntranet } from './ubicacion/routes/distrito.type.routes'
 
 import { router as routerUserAccount } from './user/routes/user.account.routes'
 
@@ -156,6 +157,7 @@ export default class Server {
     this._router.use('/color', deniedAccessUser, routerColorIntranet)
     this._router.use('/departamento', deniedAccessUser, routerDepartamentoIntranet)
     this._router.use('/provincia', deniedAccessUser, routerProvinciaIntranet)
+    this._router.use('/distrito', deniedAccessUser, routerDistritoIntranet)
 
     this._router.use('/surveys', deniedAccessUser, routerSurvey)
     this._router.use('/bank', deniedAccessUser, routerBank)
