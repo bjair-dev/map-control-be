@@ -111,7 +111,7 @@ import { ColorTypeFactory, ColorTypeStatic } from '../api/color_map/models/color
 import { DepartamentoTypeFactory, DepartamentoTypeStatic } from '../api/ubicacion/models/departamento.model'
 import { ProvinciaTypeFactory, ProvinciaStatic } from '../api/ubicacion/models/provincia.model'
 import { DistritoTypeFactory, DistritoStatic } from '../api/ubicacion/models/distrito.model'
-import { NoticiaTypeFactory, NoticiaStatic } from '../api/ubicacion/models/distrito.model'
+import { NoticiaTypeFactory, NoticiaStatic } from '../api/noticia/models/noticia.model'
 
 import { provinciaHasManyDepartamento } from './associations/provincia'
 import { DistritoHasManyProvincia } from './associations/distrito'

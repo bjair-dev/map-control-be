@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express'
 import sequelize from 'sequelize'
 import createError from 'http-errors'
-import { createTipService, updateImageTipService } from '../services/noticia.service'
+import { createNoticiaService, updateImageTipService } from '../services/noticia.service'
 import { IToken } from '../../auth/passport/passport'
-import { TipAttributes } from '../models/noticia.model'
-import { findAllTips, SearchTip } from '../services/find'
+import { NoticiaAttributes } from '../models/noticia.model'
+import { findAllNoticia, SearchTip } from '../services/find'
 import { updateTip } from '../services/update/index'
 import { deleteOneTip } from '../services/delete'
 
@@ -28,18 +28,16 @@ export const SeachTipsController = async (req: Request, res: Response, next: Nex
 export const createTipController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
-    const { tip, motivation, title, tip_category_id } = req.body
+    const { titular, title } = req.body
 
     const image = req.body.image as Buffer
 
-    const _tip = await createTipService({
+    const _tip = await createNoticiaService({
       adminId: user.userId,
       image,
       tip: {
-        tip,
-        motivation,
+        titular,
         title,
-        tip_category_id,
       },
     })
     res.status(200).json(_tip)
@@ -49,9 +47,9 @@ export const createTipController = async (req: Request, res: Response, next: Nex
     next(createError(404, err))
   }
 }
-export const findAllTipsController = async (req: Request, res: Response, next: NextFunction) => {
+/* export const findAllNoticiaController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tips = await findAllTips({
+    const tips = await findAllNoticia({
       page: Number(req.query.page),
       where: {
         state: Number(req.query.state),
@@ -67,7 +65,19 @@ export const findAllTipsController = async (req: Request, res: Response, next: N
 
     next(createError(404, err))
   }
+}  */
+
+export const findAllNoticiaController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const roles = await findAllNoticia()
+    res.status(200).json(roles)
+  } catch (err: any) {
+    if (err instanceof sequelize.ValidationError) next(createError(400, err))
+
+    next(createError(404, err))
+  }
 }
+
 export const updateTipController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken

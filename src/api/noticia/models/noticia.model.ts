@@ -1,31 +1,31 @@
 import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize'
 
-export interface TipAttributes {
+export interface NoticiaAttributes {
   id?: number
   created?: Date
   updated?: Date
   title?: string
-  tip?: string
-  motivation?: string
+  titular?: string
   path?: string
   key?: string
   size?: string
   created_by?: number
   updated_by?: number
   state?: boolean
-  tip_category_id?: number
-  '$package.id$'?: number
+  region_id?: number
+  prov_id?: number
+  distrito_id?: number
 }
-export interface TipModel extends Model<TipAttributes>, TipAttributes {}
-export class Tip extends Model<TipModel, TipAttributes> {}
+export interface NoticiaModel extends Model<NoticiaAttributes>, NoticiaAttributes {}
+export class Noticias extends Model<NoticiaModel, NoticiaAttributes> {}
 
-export type TipStatic = typeof Model & {
-  new (values?: object, options?: BuildOptions): TipModel
+export type NoticiaStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): NoticiaModel
 }
 
-export function TipFactory(sequelize: Sequelize): TipStatic {
-  return <TipStatic>sequelize.define(
-    'tip',
+export function NoticiaTypeFactory(sequelize: Sequelize): NoticiaStatic {
+  return <NoticiaStatic>sequelize.define(
+    'noticias',
     {
       id: {
         type: DataTypes.INTEGER,
@@ -33,22 +33,16 @@ export function TipFactory(sequelize: Sequelize): TipStatic {
         primaryKey: true,
         autoIncrement: true,
       },
-      tip_category_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+
       title: {
+        type: DataTypes.STRING(90),
+        allowNull: false,
+      },
+      titular: {
         type: DataTypes.STRING(500),
         allowNull: false,
       },
-      tip: {
-        type: DataTypes.STRING(500),
-        allowNull: false,
-      },
-      motivation: {
-        type: DataTypes.STRING(500),
-        allowNull: false,
-      },
+
       created: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -84,7 +78,7 @@ export function TipFactory(sequelize: Sequelize): TipStatic {
     },
     {
       initialAutoIncrement: '1',
-      tableName: 'tip',
+      tableName: 'noticias',
       timestamps: false,
     }
   )

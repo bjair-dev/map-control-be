@@ -4,7 +4,7 @@ import {
   archivedTipController,
   createTipController,
   deleteOneTipController,
-  findAllTipsController,
+  findAllNoticiaController,
   SeachTipsController,
   updateImageTipServiceController,
   updateTipController,
@@ -23,7 +23,7 @@ export const router: Router = Router()
 router.get('/search/:q', SeachTipsController)
 
 router.post('/', createTipValidator, createTipController)
-router.get('/', listTipsValidator, findAllTipsController)
+router.get('/', findAllNoticiaController)
 router.put('/:tipId', updateTipValidator, updateTipController)
 router.delete('/:tipId', deleteTipValidator, deleteOneTipController)
 router.put('/:tipId/image', updateImageTipValidator, updateImageTipServiceController)

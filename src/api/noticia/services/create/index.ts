@@ -1,37 +1,31 @@
 import { DataBase } from '../../../../database'
 import moment from 'moment'
-import { TipAttributes } from '../../models/noticia.model'
+import { NoticiaAttributes } from '../../models/noticia.model'
 
-export const createTip = async ({
+export const createNoticia = async ({
   adminId,
   key,
-  motivation,
+  titular,
   path,
   size,
-  tip,
   title,
-  tip_category_id,
 }: {
   adminId: number
   key: string
-  motivation: string
+  titular: string
   path: string
   size: string
-  tip: string
   title: string
-  tip_category_id: number
-}): Promise<TipAttributes> => {
+}): Promise<NoticiaAttributes> => {
   try {
-    return await DataBase.instance.tip.create({
+    return await DataBase.instance.noticia.create({
       created_by: adminId,
       created: moment.utc().toDate(),
       key,
-      motivation,
+      titular,
       path,
       size,
-      tip,
       title,
-      tip_category_id,
     })
   } catch (err) {
     throw err

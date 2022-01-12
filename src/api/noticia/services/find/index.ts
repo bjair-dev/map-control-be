@@ -1,12 +1,12 @@
 import { DataBase } from '../../../../database'
-import { TipModel, TipAttributes } from '../../models/noticia.model'
+import { NoticiaModel, NoticiaAttributes } from '../../models/noticia.model'
 import { Op, Order, WhereOptions } from 'sequelize'
 import { FindAttributeOptions } from 'sequelize/types'
 import { LoginTicket } from 'google-auth-library'
 
-export interface IFindAllTips {
+export interface IFindAllNoticia {
   page: number
-  rows: TipModel[]
+  rows: NoticiaModel[]
   count: number
 }
 
@@ -55,7 +55,7 @@ export const SearchTip = async ({ regex, order }: { regex?: string; order: Order
   }
 }
 
-export const findAllTips = async ({
+/* export const findAllTips = async ({
   page,
   where,
   attributes,
@@ -86,8 +86,19 @@ export const findAllTips = async ({
   } catch (err) {
     throw err
   }
+} */
+
+export const findAllNoticia = async () => {
+  try {
+    return await DataBase.instance.noticia.findAll()
+  } catch (err) {
+    throw err
+  }
 }
-export const findOneTip = async (where: WhereOptions<TipAttributes>): Promise<TipAttributes | undefined> => {
+
+export const findOneTip = async (
+  where: WhereOptions<NoticiaAttributes>
+): Promise<NoticiaAttributes | undefined> => {
   try {
     return (
       await DataBase.instance.tip.findOne({
@@ -136,9 +147,9 @@ export const getFindIdsTips = async ({
 }: {
   map_content_id_metrics: any
   tip_category_id: number
-}): Promise<TipAttributes[]> => {
+}): Promise<NoticiaAttributes[]> => {
   try {
-    const tips: TipAttributes[] = await DataBase.instance.tip.findAll({
+    const tips: NoticiaAttributes[] = await DataBase.instance.tip.findAll({
       where: {
         id: {
           [Op.in]: map_content_id_metrics,

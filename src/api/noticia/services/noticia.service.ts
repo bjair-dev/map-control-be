@@ -1,5 +1,5 @@
-import { TipAttributes } from '../models/noticia.model'
-import { createTip } from './create/index'
+import { NoticiaAttributes } from '../models/noticia.model'
+import { createNoticia } from './create/index'
 import { saveImageInServer } from '../../../shared/save.file'
 import { findOneGlobalVar } from '../../global/services/find/global'
 import config from '../../../config/environments'
@@ -8,12 +8,12 @@ import { updateTip } from './update/index'
 import { findOneTip } from './find/index'
 import path from 'path'
 
-export const createTipService = async ({
+export const createNoticiaService = async ({
   tip,
   adminId,
   image,
 }: {
-  tip: TipAttributes
+  tip: NoticiaAttributes
   adminId: number
   image: Buffer
 }) => {
@@ -29,15 +29,13 @@ export const createTipService = async ({
     } else {
       _path = (await findOneGlobalVar('tip_image_default'))?.value
     }
-    return await createTip({
+    return await createNoticia({
       adminId,
-      motivation: tip.motivation!,
-      tip: tip.tip!,
+      titular: tip.titular!,
       key: _key!,
       path: _path!,
       size: _size!,
       title: tip.title!,
-      tip_category_id: tip.tip_category_id!,
     })
   } catch (err) {
     throw err
