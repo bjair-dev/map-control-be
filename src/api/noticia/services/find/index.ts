@@ -55,19 +55,19 @@ export const SearchTip = async ({ regex, order }: { regex?: string; order: Order
   }
 }
 
-/* export const findAllTips = async ({
+export const findAllNoticia = async ({
   page,
   where,
   attributes,
 }: {
   page: number
-  where: WhereOptions<TipAttributes>
+  where: WhereOptions<NoticiaAttributes>
   attributes?: FindAttributeOptions
-}): Promise<IFindAllTips> => {
+}): Promise<IFindAllNoticia> => {
   try {
     const limit = 12
     const offset = 0 + (page - 1) * limit
-    const { count, rows } = await DataBase.instance.tip.findAndCountAll({
+    const { count, rows } = await DataBase.instance.noticia.findAndCountAll({
       where,
       attributes,
       offset,
@@ -75,10 +75,22 @@ export const SearchTip = async ({ regex, order }: { regex?: string; order: Order
       order: [['id', 'DESC']],
       include: [
         {
-          model: DataBase.instance.tipCategory,
-          as: 'tip_category',
+          model: DataBase.instance.departamento,
+          as: 'departamento',
           required: true,
-          attributes: ['id', 'category'],
+          attributes: ['id', 'name'],
+        },
+        {
+          model: DataBase.instance.provincia,
+          as: 'provincium',
+          required: true,
+          attributes: ['id', 'name'],
+        },
+        {
+          model: DataBase.instance.distrito,
+          as: 'distrito',
+          required: true,
+          attributes: ['id', 'name'],
         },
       ],
     })
@@ -86,22 +98,22 @@ export const SearchTip = async ({ regex, order }: { regex?: string; order: Order
   } catch (err) {
     throw err
   }
-} */
-
+}
+/* 
 export const findAllNoticia = async () => {
   try {
     return await DataBase.instance.noticia.findAll()
   } catch (err) {
     throw err
   }
-}
+} */
 
 export const findOneTip = async (
   where: WhereOptions<NoticiaAttributes>
 ): Promise<NoticiaAttributes | undefined> => {
   try {
     return (
-      await DataBase.instance.tip.findOne({
+      await DataBase.instance.noticia.findOne({
         where,
       })
     )?.get({ plain: true })
@@ -111,7 +123,7 @@ export const findOneTip = async (
 }
 export const FilterTips = async (ids_tips: Array<number>, tip_category_id: number) => {
   try {
-    const tips = await DataBase.instance.tip.findAll({
+    const tips = await DataBase.instance.noticia.findAll({
       where: {
         state: true,
         id: {

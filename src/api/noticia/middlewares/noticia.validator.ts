@@ -136,22 +136,22 @@ export const updateImageTipValidator = [
     }),
   allValidator,
 ]
-export const listTipsValidator = [
+export const listNoticiaValidator = [
   query('page').isNumeric().withMessage('Solo numero').bail().isInt({ min: 1 }).withMessage('El nimimo es 1'),
   query('state').isBoolean().withMessage('Solo valores booleanos'),
   allValidator,
 ]
 //*DESC Validator of the archived or unarchived of the Tip
-export const archivedOrUnArchivedTipValidator = [
+export const archivedOrUnArchivedNoticiaValidator = [
   body('state').isBoolean().withMessage('Solo valores booleanos'),
-  param('tipId')
+  param('noticiaId')
     .isNumeric()
     .withMessage('Tiene que ser valores numericos')
     .bail()
-    .custom(async (tipId: number, { req }: { req: any }) => {
-      const question = await findOneTip({ id: tipId, state: !req.body.state })
+    .custom(async (noticiaId: number, { req }: { req: any }) => {
+      const question = await findOneTip({ id: noticiaId, state: !req.body.state })
       if (!question)
-        throw new Error('El tip no existe o esta en estado ' + (req.body.state ? 'activo' : 'archivado'))
+        throw new Error('La noticia no existe o esta en estado ' + (req.body.state ? 'activo' : 'archivado'))
     }),
   allValidator,
 ]

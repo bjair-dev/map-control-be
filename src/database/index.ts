@@ -115,6 +115,11 @@ import { NoticiaTypeFactory, NoticiaStatic } from '../api/noticia/models/noticia
 
 import { provinciaHasManyDepartamento } from './associations/provincia'
 import { DistritoHasManyProvincia } from './associations/distrito'
+import {
+  noticiaHasManyDepartamento,
+  noticiaHasManyDistrito,
+  noticiaHasManyProvincia,
+} from './associations/noticia'
 
 export class DataBase {
   private static _instance: DataBase
@@ -305,6 +310,22 @@ export class DataBase {
       provincia: this.provincia,
       distrito: this.distrito,
     })
+
+    noticiaHasManyDepartamento({
+      departamento: this.departamento,
+      noticia: this.noticia,
+    })
+
+    noticiaHasManyProvincia({
+      provincia: this.provincia,
+      noticia: this.noticia,
+    })
+
+    noticiaHasManyDistrito({
+      distrito: this.distrito,
+      noticia: this.noticia,
+    })
+
     contentTypeHasManyPackageHeader({
       contentType: this.packageContentType,
       _package: this.package,

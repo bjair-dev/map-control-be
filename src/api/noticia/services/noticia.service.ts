@@ -9,11 +9,11 @@ import { findOneTip } from './find/index'
 import path from 'path'
 
 export const createNoticiaService = async ({
-  tip,
+  noticia,
   adminId,
   image,
 }: {
-  tip: NoticiaAttributes
+  noticia: NoticiaAttributes
   adminId: number
   image: Buffer
 }) => {
@@ -31,11 +31,11 @@ export const createNoticiaService = async ({
     }
     return await createNoticia({
       adminId,
-      titular: tip.titular!,
+      titular: noticia.titular!,
       key: _key!,
       path: _path!,
       size: _size!,
-      title: tip.title!,
+      title: noticia.title!,
     })
   } catch (err) {
     throw err

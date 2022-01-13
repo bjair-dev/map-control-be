@@ -10,10 +10,10 @@ import {
   updateTipController,
 } from '../controllers/noticia.controller'
 import {
-  archivedOrUnArchivedTipValidator,
+  archivedOrUnArchivedNoticiaValidator,
   createTipValidator,
   deleteTipValidator,
-  listTipsValidator,
+  listNoticiaValidator,
   updateImageTipValidator,
   updateTipValidator,
 } from '../middlewares/noticia.validator'
@@ -23,8 +23,8 @@ export const router: Router = Router()
 router.get('/search/:q', SeachTipsController)
 
 router.post('/', createTipValidator, createTipController)
-router.get('/', findAllNoticiaController)
+router.get('/', listNoticiaValidator, findAllNoticiaController)
 router.put('/:tipId', updateTipValidator, updateTipController)
 router.delete('/:tipId', deleteTipValidator, deleteOneTipController)
 router.put('/:tipId/image', updateImageTipValidator, updateImageTipServiceController)
-router.put('/:tipId/archived', archivedOrUnArchivedTipValidator, archivedTipController)
+router.put('/:tipId/archived', archivedOrUnArchivedNoticiaValidator, archivedTipController)
