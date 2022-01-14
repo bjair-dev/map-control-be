@@ -1,42 +1,46 @@
 import { DataBase } from '../../../../database'
 import moment from 'moment'
 
-export const updateTip = async ({
+export const updateNoticia = async ({
   id,
   title,
-  tip,
-  motivation,
+  titular,
   state,
   key,
   path,
   size,
   adminId,
-  tip_category_id,
+  region_id,
+  prov_id,
+  distrito_id,
 }: {
   id: number
   title?: string
-  tip?: string
-  motivation?: string
+  titular?: string
   state?: boolean
   key?: string
   path?: string
   size?: string
   adminId: number
-  tip_category_id?: number
+  region_id?: number
+  prov_id?: number
+
+  distrito_id?: number
 }) => {
   try {
-    return await DataBase.instance.tip.update(
+    return await DataBase.instance.noticia.update(
       {
         title,
-        tip,
-        motivation,
+        titular,
         updated: moment.utc().toDate(),
         updated_by: adminId,
         state,
         key,
         path,
         size,
-        tip_category_id,
+        region_id,
+        prov_id,
+        distrito_id,
       },
       {
         where: {

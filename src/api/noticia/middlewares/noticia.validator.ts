@@ -2,10 +2,12 @@ import { body, query, param } from 'express-validator'
 import { resizeImage } from '../../../helpers/sharp'
 import { allValidator } from '../../../shared/express.validator'
 import { extractFile } from '../../../shared/express.satinizer'
-import { existsTip } from '../validator/noticia.custom'
-import { findOneTip } from '../services/find/index'
-import { existsTipCategory } from '../validator/noticia.category.custom'
-export const createTipValidator = [
+import { existsNoticia } from '../validator/noticia.custom'
+import { findOneNoticia } from '../services/find/index'
+import { existsProv } from '../../ubicacion/middlewares/provincia.validator'
+import { existsDepar } from '../../ubicacion/middlewares/departamento.validator'
+import { existsDistri } from '../../ubicacion/middlewares/distrito.validator'
+export const createNoticiaValidator = [
   body('title')
     .isString()
     .withMessage('Tiene que ser un string')
@@ -16,23 +18,18 @@ export const createTipValidator = [
     .bail()
     .isLength({ min: 10, max: 200 })
     .withMessage('Tiene un minimo de 10 letras y maximo de 200'),
-  body('tip')
+
+  body('titular')
     .isString()
-    .withMessage('Tiene que se un tip')
+    .withMessage('Tiene que tener un titular')
     .bail()
     .isLength({ max: 500 })
     .withMessage('Tiene un maximo de 500'),
-  body('tip_category_id')
-    .isNumeric()
-    .withMessage('Se require una categoria')
-    .bail()
-    .custom(existsTipCategory),
-  body('motivation')
-    .isString()
-    .withMessage('Tiene que se una motivación')
-    .bail()
-    .isLength({ max: 500 })
-    .withMessage('Tiene un maximo de 500'),
+  body('region_id').isNumeric().withMessage('Se requiere un departamento').bail().custom(existsDepar),
+
+  body('prov_id').isNumeric().withMessage('Se requiere una provincia').bail().custom(existsProv),
+  body('distrito_id').isNumeric().withMessage('Se requiere un distrito').bail().custom(existsDistri),
+
   body('image')
     .isString()
     .withMessage('Es una cadena de Base64')
@@ -66,17 +63,17 @@ export const createTipValidator = [
     .optional({ nullable: true }),
   allValidator,
 ]
-export const deleteTipValidator = [
-  param('tipId').isNumeric().withMessage('Tiene que ser numerico').bail().custom(existsTip),
+export const deleteNoticiaValidator = [
+  param('noticiaId').isNumeric().withMessage('Tiene que ser numerico').bail().custom(existsNoticia),
   allValidator,
 ]
-export const updateTipValidator = [
-  param('tipId').isNumeric().withMessage('Tiene que ser numerico').bail().custom(existsTip),
-  body('tip_category_id')
-    .isNumeric()
-    .withMessage('Se require una categoria')
-    .bail()
-    .custom(existsTipCategory),
+export const updateNoticiaValidator = [
+  param('noticiaId').isNumeric().withMessage('Tiene que ser numerico').bail().custom(existsNoticia),
+  body('region_id').isNumeric().withMessage('Se requiere un departamento').bail().custom(existsDepar),
+
+  body('prov_id').isNumeric().withMessage('Se requiere una provincia').bail().custom(existsProv),
+  body('distrito_id').isNumeric().withMessage('Se requiere un distrito').bail().custom(existsDistri),
+
   body('title')
     .isString()
     .withMessage('Tiene que ser un string')
@@ -87,23 +84,16 @@ export const updateTipValidator = [
     .bail()
     .isLength({ min: 10, max: 200 })
     .withMessage('Tiene un minimo de 10 letras y maximo de 200'),
-  body('tip')
+  body('titular')
     .isString()
-    .withMessage('Tiene que se un tip')
+    .withMessage('Tiene que se un titular')
     .bail()
     .isLength({ max: 500 })
     .withMessage('Tiene un maximo de 500'),
-  body('motivation')
-    .isString()
-    .withMessage('Tiene que se una motivación')
-    .bail()
-    .isLength({ max: 500 })
-    .withMessage('Tiene un maximo de 500'),
-  allValidator,
 ]
 //*@DESC update image of the question
-export const updateImageTipValidator = [
-  param('tipId').isNumeric().withMessage('Se require un numero').bail().custom(existsTip),
+export const updateImageNoticiaValidator = [
+  param('noticiaId').isNumeric().withMessage('Se require un numero').bail().custom(existsNoticia),
   body('image')
     .isString()
     .withMessage('Es una cadena de Base64')
@@ -149,8 +139,8 @@ export const archivedOrUnArchivedNoticiaValidator = [
     .withMessage('Tiene que ser valores numericos')
     .bail()
     .custom(async (noticiaId: number, { req }: { req: any }) => {
-      const question = await findOneTip({ id: noticiaId, state: !req.body.state })
-      if (!question)
+      const noticia = await findOneNoticia({ id: noticiaId, state: !req.body.state })
+      if (!noticia)
         throw new Error('La noticia no existe o esta en estado ' + (req.body.state ? 'activo' : 'archivado'))
     }),
   allValidator,

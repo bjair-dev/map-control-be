@@ -108,7 +108,7 @@ export const findAllNoticia = async () => {
   }
 } */
 
-export const findOneTip = async (
+export const findOneNoticia = async (
   where: WhereOptions<NoticiaAttributes>
 ): Promise<NoticiaAttributes | undefined> => {
   try {

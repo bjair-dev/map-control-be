@@ -4,8 +4,8 @@ import { saveImageInServer } from '../../../shared/save.file'
 import { findOneGlobalVar } from '../../global/services/find/global'
 import config from '../../../config/environments'
 import { removeFile } from '../../../shared/remove.file'
-import { updateTip } from './update/index'
-import { findOneTip } from './find/index'
+import { updateNoticia } from './update/index'
+import { findOneNoticia } from './find/index'
 import path from 'path'
 
 export const createNoticiaService = async ({
@@ -31,34 +31,37 @@ export const createNoticiaService = async ({
     }
     return await createNoticia({
       adminId,
-      titular: noticia.titular!,
       key: _key!,
       path: _path!,
       size: _size!,
       title: noticia.title!,
+      titular: noticia.titular!,
+      region_id: noticia.region_id!,
+      prov_id: noticia.prov_id!,
+      distrito_id: noticia.distrito_id!,
     })
   } catch (err) {
     throw err
   }
 }
-export const updateImageTipService = async ({
-  tipId,
+export const updateImageNoticiaService = async ({
+  noticiaId,
   image,
   adminId,
 }: {
-  tipId: number
+  noticiaId: number
   image: Buffer
   adminId: number
 }) => {
   try {
-    const _key = (await findOneTip({ id: tipId, state: true }))?.key
+    const _key = (await findOneNoticia({ id: noticiaId, state: true }))?.key
     const [result, { key, size }] = await Promise.all([
       removeFile({ path: path.join(config.DIR_ASSETS!, _key || '') }),
       saveImageInServer({ buffer: image }),
     ])
     const _path = config.PROY_BEURL + '/api/render-image/' + key
-    await updateTip({
-      id: tipId,
+    await updateNoticia({
+      id: noticiaId,
       key,
       size,
       path: _path,

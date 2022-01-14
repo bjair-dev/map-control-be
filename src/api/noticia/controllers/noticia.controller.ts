@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import sequelize from 'sequelize'
 import createError from 'http-errors'
-import { createNoticiaService, updateImageTipService } from '../services/noticia.service'
+import { createNoticiaService, updateImageNoticiaService } from '../services/noticia.service'
 import { IToken } from '../../auth/passport/passport'
 import { NoticiaAttributes } from '../models/noticia.model'
 import { findAllNoticia, SearchTip } from '../services/find'
-import { updateTip } from '../services/update/index'
-import { deleteOneTip } from '../services/delete'
+import { updateNoticia } from '../services/update/index'
+import { deleteOneNoticia } from '../services/delete'
 
 export const SeachTipsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -25,10 +25,10 @@ export const SeachTipsController = async (req: Request, res: Response, next: Nex
   }
 }
 
-export const createTipController = async (req: Request, res: Response, next: NextFunction) => {
+export const createNoticiaController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
-    const { titular, title } = req.body
+    const { titular, title, region_id, prov_id, distrito_id } = req.body
 
     const image = req.body.image as Buffer
 
@@ -38,6 +38,9 @@ export const createTipController = async (req: Request, res: Response, next: Nex
       noticia: {
         titular,
         title,
+        region_id,
+        prov_id,
+        distrito_id,
       },
     })
     res.status(200).json(_noticia)
@@ -78,17 +81,18 @@ export const findAllNoticiaController = async (req: Request, res: Response, next
   }
 } */
 
-export const updateTipController = async (req: Request, res: Response, next: NextFunction) => {
+export const updateNoticiaController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
-    const { motivation, tip, title, tip_category_id } = req.body
-    await updateTip({
-      id: Number(req.params.tipId),
-      motivation,
-      tip,
+    const { titular, title, region_id, prov_id, distrito_id } = req.body
+    await updateNoticia({
+      id: Number(req.params.noticiaId),
+      titular,
       title,
       adminId: user.userId,
-      tip_category_id,
+      region_id,
+      prov_id,
+      distrito_id,
     })
     res.status(200).json('¡Se actualizo correctamente!')
   } catch (err: any) {
@@ -97,13 +101,17 @@ export const updateTipController = async (req: Request, res: Response, next: Nex
     next(createError(404, err))
   }
 }
-export const updateImageTipServiceController = async (req: Request, res: Response, next: NextFunction) => {
+export const updateImageNoticiaServiceController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user = req.user as IToken
 
-    const results = await updateImageTipService({
+    const results = await updateImageNoticiaService({
       image: req.body.image as Buffer,
-      tipId: Number(req.params.tipId),
+      noticiaId: Number(req.params.noticiaId),
       adminId: user.userId,
     })
     res.status(200).json(results)
@@ -114,12 +122,12 @@ export const updateImageTipServiceController = async (req: Request, res: Respons
   }
 }
 //*DESC Archived or Unarchived the tips
-export const archivedTipController = async (req: Request, res: Response, next: NextFunction) => {
+export const archivedNoticiaController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
 
-    await updateTip({
-      id: Number(req.params.tipId),
+    await updateNoticia({
+      id: Number(req.params.noticiaId),
       state: req.body.state,
       adminId: user.userId,
     })
@@ -130,9 +138,9 @@ export const archivedTipController = async (req: Request, res: Response, next: N
     next(createError(404, err))
   }
 }
-export const deleteOneTipController = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteOneNoticiaController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    await deleteOneTip(Number(req.params.tipId))
+    await deleteOneNoticia(Number(req.params.noticiaId))
     res.status(200).json('¡Se elimino correctamente!')
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err))

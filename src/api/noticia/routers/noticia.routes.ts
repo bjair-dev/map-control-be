@@ -1,30 +1,30 @@
 import { Router } from 'express'
 import { SeachUsersController } from '../../user/controllers/user.controller'
 import {
-  archivedTipController,
-  createTipController,
-  deleteOneTipController,
+  archivedNoticiaController,
+  createNoticiaController,
+  deleteOneNoticiaController,
   findAllNoticiaController,
   SeachTipsController,
-  updateImageTipServiceController,
-  updateTipController,
+  updateImageNoticiaServiceController,
+  updateNoticiaController,
 } from '../controllers/noticia.controller'
 import {
   archivedOrUnArchivedNoticiaValidator,
-  createTipValidator,
-  deleteTipValidator,
+  createNoticiaValidator,
+  deleteNoticiaValidator,
   listNoticiaValidator,
-  updateImageTipValidator,
-  updateTipValidator,
+  updateImageNoticiaValidator,
+  updateNoticiaValidator,
 } from '../middlewares/noticia.validator'
 
 export const router: Router = Router()
 
 router.get('/search/:q', SeachTipsController)
 
-router.post('/', createTipValidator, createTipController)
+router.post('/', createNoticiaValidator, createNoticiaController)
 router.get('/', listNoticiaValidator, findAllNoticiaController)
-router.put('/:tipId', updateTipValidator, updateTipController)
-router.delete('/:tipId', deleteTipValidator, deleteOneTipController)
-router.put('/:tipId/image', updateImageTipValidator, updateImageTipServiceController)
-router.put('/:tipId/archived', archivedOrUnArchivedNoticiaValidator, archivedTipController)
+router.put('/:noticiaId', updateNoticiaValidator, updateNoticiaController)
+router.delete('/:noticiaId', deleteNoticiaValidator, deleteOneNoticiaController)
+router.put('/:noticiaId/image', updateImageNoticiaValidator, updateImageNoticiaServiceController)
+router.put('/:noticiaId/archived', archivedOrUnArchivedNoticiaValidator, archivedNoticiaController)
