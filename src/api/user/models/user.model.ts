@@ -6,7 +6,7 @@ export interface UserAttributes {
   salt?: string
   name?: string
   code_verification?: string
-  date_of_birth?:string
+  date_of_birth?: string
   lastname?: string
   email?: string
   cellphone?: number
@@ -28,12 +28,16 @@ export interface UserAttributes {
   path?: string
   number_of_sessions?: number
   //Days of session and date
-  user_session_day?:number
-  date_user_session_day?:Date
-  
-  device_id?:string
-  origin?:string
-  terms_and_conditions?:boolean
+  user_session_day?: number
+  date_user_session_day?: Date
+
+  device_id?: string
+  origin?: string
+  terms_and_conditions?: boolean
+
+  region_id?: number
+  prov_id?: number
+  distrito_id?: number
 }
 export interface UserModel extends Model<UserAttributes>, UserAttributes {}
 export class User extends Model<UserModel, UserAttributes> {}
@@ -52,16 +56,16 @@ export function UserFactory(sequelize: Sequelize): UserStatic {
         primaryKey: true,
         autoIncrement: true,
       },
-      user_session_day:{
-        type:DataTypes.NUMBER
+      user_session_day: {
+        type: DataTypes.NUMBER,
       },
-      terms_and_conditions:{
-        type:DataTypes.BOOLEAN,
-        defaultValue:false,
-        allowNull:false
+      terms_and_conditions: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
       },
-      date_user_session_day:{
-        type:DataTypes.DATEONLY
+      date_user_session_day: {
+        type: DataTypes.DATEONLY,
       },
       device_id: {
         type: DataTypes.STRING(250),
@@ -80,17 +84,17 @@ export function UserFactory(sequelize: Sequelize): UserStatic {
         type: DataTypes.STRING(100),
         allowNull: true,
       },
-      
+
       code_verification: {
         type: DataTypes.STRING(4),
         allowNull: true,
       },
-      
+
       date_of_birth: {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      
+
       lastname: {
         type: DataTypes.STRING(100),
         allowNull: true,
@@ -166,7 +170,7 @@ export function UserFactory(sequelize: Sequelize): UserStatic {
       origin: {
         type: DataTypes.STRING(70),
         allowNull: true,
-        defaultValue:'correo'
+        defaultValue: 'correo',
       },
     },
     {

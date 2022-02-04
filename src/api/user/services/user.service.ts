@@ -2,7 +2,8 @@ import { actualizarNumIntentos, bloqueoUsuario, bloqueoUsuarioTemporal, updatePa
 import { UserAttributes } from '../models/user.model'
 import {
   //  sendEmail,
-   sendMailAxios } from '../../../utils/generate.mail'
+  sendMailAxios,
+} from '../../../utils/generate.mail'
 import { createUser } from './create'
 import { template_create_user } from '../../../templates/templates'
 import CryptoJS from 'crypto-js'
@@ -20,11 +21,7 @@ export const validateStatusUser = ({
     return true
   } else if (estado == 'BIT') {
     var horaBloqueoDato = new Date(horaBloqueo!)
-    new Date(
-      horaBloqueoDato.setTime(
-        Number(horaBloqueoDato.getTime() + 60000 * cantidadMinBloqueo!)
-      )
-    )
+    new Date(horaBloqueoDato.setTime(Number(horaBloqueoDato.getTime() + 60000 * cantidadMinBloqueo!)))
     if (horaBloqueoDato >= new Date()) {
       return false
     } else {
@@ -99,24 +96,19 @@ export const amountIntUser = async ({
 //   }
 // }
 
-
-
-
-
 export const createUserAndSendCodeVerificationToMail = async (user: UserAttributes) => {
   try {
-    
     const _user: UserAttributes = await createUser(user)
     return await sendMailAxios({
       template: template_create_user({
         names: _user.name + ' ' + _user.lastname,
-        code:user.code_verification,
+        code: user.code_verification,
         banner:
           'https://images.pexels.com/photos/1043473/pexels-photo-1043473.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
       }),
       // title: `[MIYUNTA] Bienvenido , este es tu código de verificación ${user.code_verification}`,
-      title:`[MIYUNTA] Código de verificación`,
-      
+      title: `[NIKA] Código de verificación`,
+
       to: _user.email!,
     })
   } catch (err) {
@@ -124,35 +116,32 @@ export const createUserAndSendCodeVerificationToMail = async (user: UserAttribut
   }
 }
 
-export const updatePasswordUserService = async (new_password:string,userId:number) => {
+export const updatePasswordUserService = async (new_password: string, userId: number) => {
   try {
-    
     const salt = CryptoJS.lib.WordArray.random(30)
     const hashpwd = CryptoJS.PBKDF2(new_password!, salt.toString(), {
       iterations: 10000,
       keySize: 10,
     })
-    
+
     return await updatePasswordUser({
-      where:{
-        id:userId
+      where: {
+        id: userId,
       },
       // updated_by:userId,
-      password:hashpwd.toString(),
-      salt:salt.toString()
-      
+      password: hashpwd.toString(),
+      salt: salt.toString(),
     })
-   
   } catch (err) {
     throw err
   }
 }
 
 export const createNewUser = async (user: UserAttributes) => {
-  try{
+  try {
     // const _user: UserAttributes = await createUser(user)
     return await createUser(user)
-  }catch (err) {
+  } catch (err) {
     throw err
   }
 }

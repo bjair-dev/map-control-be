@@ -46,6 +46,10 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
       dni,
 
       date_of_birth,
+
+      region_id,
+      prov_id,
+      distrito_id,
     } = req.body
 
     enum opt {
@@ -75,9 +79,12 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
       code_verification: code,
       date_of_birth,
       state: false,
+      region_id,
+      prov_id,
+      distrito_id,
     })
 
-    res.status(200).json('¡usuario creado , se te envio un código de verificación a tu correo !')
+    res.status(200).json('¡El usuario fue creado con exito, se te envio un código verifica tu correo !')
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err))
 
