@@ -30,14 +30,12 @@ export interface UserAttributes {
   //Days of session and date
   user_session_day?: number
   date_user_session_day?: Date
-
-  device_id?: string
-  origin?: string
-  terms_and_conditions?: boolean
-
   region_id?: number
   prov_id?: number
   distrito_id?: number
+  device_id?: string
+  origin?: string
+  terms_and_conditions?: boolean
 }
 export interface UserModel extends Model<UserAttributes>, UserAttributes {}
 export class User extends Model<UserModel, UserAttributes> {}
@@ -157,6 +155,18 @@ export function UserFactory(sequelize: Sequelize): UserStatic {
       },
       size: {
         type: DataTypes.STRING(20),
+        allowNull: true,
+      },
+      region_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      prov_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      distrito_id: {
+        type: DataTypes.INTEGER,
         allowNull: true,
       },
       ext: {

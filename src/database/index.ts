@@ -17,6 +17,9 @@ import {
   userHasManyBankAccount,
   userHasManyEntry,
   userHasManyChallenge,
+  userHasManyProvincia,
+  userHasManyDistrito,
+  userHasManyDepartamento,
   //  , userHasManyEntryType
 } from './associations/user'
 import { questionCategoryHasManyQuestion, questionTypeHasManyQuestion } from './associations/question'
@@ -267,6 +270,21 @@ export class DataBase {
     })
     userHasManyEntry({
       entry: this.entry,
+      user: this.user,
+    })
+
+    userHasManyDepartamento({
+      departamento: this.departamento,
+      user: this.user,
+    })
+
+    userHasManyProvincia({
+      provincia: this.provincia,
+      user: this.user,
+    })
+
+    userHasManyDistrito({
+      distrito: this.distrito,
       user: this.user,
     })
 
