@@ -6,6 +6,11 @@ import { TokenStatic, TokenFactory } from '../api/token/models/token.model'
 import { AdminFactory, AdminStatic } from '../api/admin/models/admin.model'
 
 import {
+  userHasManyAnswer,
+  // userbelongsToMany,
+  userHasManyBankAccount,
+  userHasManyEntry,
+  userHasManyChallenge,
   userHasManyProvincia,
   userHasManyDistrito,
   userHasManyDepartamento,
@@ -128,8 +133,22 @@ export class DataBase {
       user: this.user,
     })
 
+    userHasManyDepartamento({
+      departamento: this.departamento,
+      user: this.user,
+    })
+
+    userHasManyProvincia({
+      provincia: this.provincia,
+      user: this.user,
+    })
+
     userHasManyDistrito({
       distrito: this.distrito,
+      user: this.user,
+    })
+
+    userHasManyBankAccount({
       user: this.user,
     })
 
