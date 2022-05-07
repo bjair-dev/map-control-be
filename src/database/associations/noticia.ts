@@ -1,5 +1,7 @@
-import { DepartamentoTypeStatic } from '../../api/ubicacion/models/departamento.model'
 import { NoticiaStatic } from '../../api/noticia/models/noticia.model'
+
+import { DepartamentoTypeStatic } from '../../api/ubicacion/models/departamento.model'
+
 import { ProvinciaStatic } from '../../api/ubicacion/models/provincia.model'
 import { DistritoStatic } from '../../api/ubicacion/models/distrito.model'
 

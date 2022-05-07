@@ -135,7 +135,7 @@ export const updateUserStateCodeVerification = async ({
 }: {
   state: boolean
   email: string
-}):Promise<any> => {
+}): Promise<any> => {
   return await DataBase.instance.user.update(
     {
       state,
@@ -148,39 +148,37 @@ export const updateUserStateCodeVerification = async ({
   )
 }
 
-
 export const updateUser = async ({
   where,
   user,
 }: {
   where: WhereOptions<UserAttributes>
   user: UserAttributes
-}):Promise<any> => {
+}): Promise<any> => {
   return await DataBase.instance.user.update(
-    {...user},
+    { ...user },
     {
-      where
+      where,
     }
   )
 }
 
-export const updateIdDevice = async (device_id:string, userId:number) => {
+export const updateIdDevice = async (device_id: string, userId: number) => {
   try {
     const user = await DataBase.instance.user.update(
-        {
-          device_id,
-          updated:moment().toDate(),
-          // updated_data: new Date(),
-        },
-        {
-          where: { id: userId },
-        }
-      );
-    
-   
-    return user;
+      {
+        device_id,
+        updated: moment().toDate(),
+        // updated_data: new Date(),
+      },
+      {
+        where: { id: userId },
+      }
+    )
+
+    return user
   } catch (err) {
-    throw err;
+    throw err
   }
 }
 
@@ -188,7 +186,7 @@ export const updatePasswordUser = async ({
   where,
   // updated_by,
   salt,
-  password
+  password,
 }: {
   where: WhereOptions<UserAttributes>
   // updated_by?: number
@@ -201,7 +199,7 @@ export const updatePasswordUser = async ({
         // updated_by,
         updated: moment.utc().toDate(),
         salt,
-        password
+        password,
       },
       {
         where,

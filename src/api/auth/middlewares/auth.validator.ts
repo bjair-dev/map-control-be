@@ -2,6 +2,9 @@ import { allValidator } from '../../../shared/express.validator'
 import { body, header, query } from 'express-validator'
 import { existsEmailOfUser, validateToken } from '../validator/auth.custom'
 import { existsEmailOfAdmin, RegexValidNewPassword } from '../../admin/validator/admin.custom'
+import { existsProvincia } from '../../ubicacion/validator/provincia.custom'
+import { existsDistrito } from '../../ubicacion/validator/distrito.custom'
+import { existsDepartamento } from '../../ubicacion/validator/departamento.custom'
 
 export const signupValidator = [
   body('email')
@@ -24,15 +27,15 @@ export const signupValidator = [
     .not()
     .isEmpty()
     .withMessage('No puede ser vacio'),
-    body('date_of_birth')
+  body('date_of_birth')
     .isDate()
     .withMessage('Se require un date')
     .bail()
     .not()
     .isEmpty()
     .withMessage('No puede ser vacio'),
-    // .optional({nullable:true}),
-    
+  // .optional({nullable:true}),
+
   body('cellphone')
     .isNumeric()
     .withMessage('Se require un entero')
@@ -41,13 +44,9 @@ export const signupValidator = [
     .withMessage('Debe ser 9 numeros'),
   body('sexo')
     .toLowerCase()
-    .isIn(['hombre', 'mujer','no especificado'])
+    .isIn(['hombre', 'mujer', 'no especificado'])
     .withMessage('Solo se eliguen Hombre y Mujer'),
-  body('dni')
-    .isNumeric()
-    .withMessage('Se require el DNI')
-    .bail()
-    .isLength({ min: 8, max: 8 }),
+  body('dni').isNumeric().withMessage('Se require el DNI').bail().isLength({ min: 8, max: 8 }),
   body('password')
     .isString()
     .withMessage('Se require un string')
@@ -60,9 +59,29 @@ export const signupValidator = [
     .withMessage('Tiene que tener de 6 a 16 digitos')
     .bail()
     .custom(RegexValidNewPassword),
-    
-    // .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
-    // .withMessage('Se requiere al menos un numero y un caracter especial'),
+
+  body('region_id')
+    .isNumeric()
+    .withMessage('Se require un numero')
+    .bail()
+    .custom(existsDepartamento)
+    .optional({ nullable: true }),
+
+  body('prov_id')
+    .isNumeric()
+    .withMessage('Se require un numero')
+    .bail()
+    .custom(existsProvincia)
+    .optional({ nullable: true }),
+
+  body('distrito_id')
+    .isNumeric()
+    .withMessage('Se require un numero')
+    .bail()
+    .custom(existsDistrito)
+    .optional({ nullable: true }),
+  // .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
+  // .withMessage('Se requiere al menos un numero y un caracter especial'),
   allValidator,
 ]
 export const signinValidator = [
@@ -75,37 +94,33 @@ export const signinValidator = [
     .isEmpty()
     .withMessage('No puede ser vacio')
     .bail(),
-    // .isLength({ min: 10, max: 16 })
-    // .withMessage('Tiene que tener de 10 a 16 digitos')
-    // .bail()
-    // .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
-    // .withMessage('Se requiere al menos un numero y un caracter especial'),
+  // .isLength({ min: 10, max: 16 })
+  // .withMessage('Tiene que tener de 10 a 16 digitos')
+  // .bail()
+  // .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
+  // .withMessage('Se requiere al menos un numero y un caracter especial'),
   allValidator,
 ]
 export const signoutValidator = [
-  
   header('authorization')
-  .isString()
-  .withMessage('Se require un string')
-  .bail()
-  .not()
-  .isEmpty()
-  .withMessage('No puede ser vacio')
-  .bail()
-  .custom(validateToken),
+    .isString()
+    .withMessage('Se require un string')
+    .bail()
+    .not()
+    .isEmpty()
+    .withMessage('No puede ser vacio')
+    .bail()
+    .custom(validateToken),
   // .custom((authorization, { req }) => req.user.rol !== 'user')
   // .withMessage('No tiene autorización para esta ruta como usuario'),
 
-    // .isLength({ min: 10, max: 16 })
-    // .withMessage('Tiene que tener de 10 a 16 digitos')
-    // .bail()
-    // .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
-    // .withMessage('Se requiere al menos un numero y un caracter especial'),
+  // .isLength({ min: 10, max: 16 })
+  // .withMessage('Tiene que tener de 10 a 16 digitos')
+  // .bail()
+  // .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)
+  // .withMessage('Se requiere al menos un numero y un caracter especial'),
   allValidator,
 ]
-
-
-
 
 export const signupAdminValidator = [
   body('email').isEmail().withMessage('Se require un email'),
@@ -146,10 +161,7 @@ export const signinAdminValidator = [
     .bail()
     .isLength({ min: 9, max: 9 })
     .withMessage('Debe ser 9 numeros'),
-  body('sexo')
-    .toLowerCase()
-    .isIn(['hombre', 'mujer'])
-    .withMessage('Solo se eliguen Hombre y Mujer'),
+  body('sexo').toLowerCase().isIn(['hombre', 'mujer']).withMessage('Solo se eliguen Hombre y Mujer'),
   body('password')
     .isString()
     .withMessage('Se require un string')
