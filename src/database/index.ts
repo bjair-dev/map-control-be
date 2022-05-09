@@ -6,11 +6,8 @@ import { TokenStatic, TokenFactory } from '../api/token/models/token.model'
 import { AdminFactory, AdminStatic } from '../api/admin/models/admin.model'
 
 import {
-  userHasManyAnswer,
-  // userbelongsToMany,
-  userHasManyBankAccount,
-  userHasManyEntry,
-  userHasManyChallenge,
+
+
   userHasManyProvincia,
   userHasManyDistrito,
   userHasManyDepartamento,
@@ -34,6 +31,7 @@ import {
 
 import { ActionFactory, ActionStatic } from '../api/action/models/action.model'
 import { ColorTypeFactory, ColorTypeStatic } from '../api/color_map/models/color_map.model.model'
+import { CommentsFactory, CommentsStatic } from '../api/comments_map/models/comments_map.model'
 import { DepartamentoTypeFactory, DepartamentoTypeStatic } from '../api/ubicacion/models/departamento.model'
 import { ProvinciaTypeFactory, ProvinciaStatic } from '../api/ubicacion/models/provincia.model'
 import { DistritoTypeFactory, DistritoStatic } from '../api/ubicacion/models/distrito.model'
@@ -46,6 +44,7 @@ import {
   noticiaHasManyDistrito,
   noticiaHasManyProvincia,
 } from './associations/noticia'
+import { commentsHasManyUser } from './associations/comments'
 
 export class DataBase {
   private static _instance: DataBase
@@ -55,6 +54,7 @@ export class DataBase {
   public admin: AdminStatic
   public token: TokenStatic
   public colorMap: ColorTypeStatic
+  public commentsMap: CommentsStatic
   public departamento: DepartamentoTypeStatic
   public provincia: ProvinciaStatic
   public distrito: DistritoStatic
@@ -91,6 +91,7 @@ export class DataBase {
     this.token = TokenFactory(this.sequelize)
 
     this.colorMap = ColorTypeFactory(this.sequelize)
+    this.commentsMap = CommentsFactory(this.sequelize)
     this.departamento = DepartamentoTypeFactory(this.sequelize)
     this.provincia = ProvinciaTypeFactory(this.sequelize)
     this.distrito = DistritoTypeFactory(this.sequelize)
@@ -147,9 +148,9 @@ export class DataBase {
       distrito: this.distrito,
       user: this.user,
     })
-
-    userHasManyBankAccount({
-      user: this.user,
+    commentsHasManyUser({
+      comments:this.commentsMap,
+      user:this.user
     })
 
     // userHasManyEntryType({

@@ -14,6 +14,7 @@ import { router as routerDistritoIntranet } from './ubicacion/routes/distrito.ty
 import { router as routerNoticiasIntranet } from './noticia/routers/noticia.routes'
 
 import { router as routerUserAccount } from './user/routes/user.account.routes'
+import { router as routerCommentsAccount } from './comments_map/routers/comments_map.routes'
 
 import { router as termsConditions } from './terms_and_conditions/routes/termsconditions.routes'
 
@@ -81,7 +82,8 @@ export default class Server {
 
     this._router.use('/user-account', deniedAccessAdmin, routerUserAccount)
 
-    this._router.use('/tips-categories-user', deniedAccessAdmin, routerTipCategoryUser)
+    this._router.use('/comments', deniedAccessAdmin, routerCommentsAccount)
+ 
 
     //*@USE ADMIN
     this._router.use('/report', deniedAccessUser, routerReport)
