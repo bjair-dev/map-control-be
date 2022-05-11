@@ -2,19 +2,19 @@ import { Router } from 'express'
 import { SeachUsersController } from '../../user/controllers/user.controller'
 import {
   /* archivedTipController, */
-/*   createCommentsController,
- */  deleteOneCommentsController,
+  createCommentsController,
+  deleteOneCommentsController,
   findAllCommentsController,
   SeachCommentsController,
-/*   updateImageTipServiceController, */
-/*   updateTipController, */
+  /*   updateImageTipServiceController, */
+  /*   updateTipController, */
 } from '../controllers/comments_map.controller'
 import {
-/*   archivedOrUnArchivedTipValidator, */
+  /*   archivedOrUnArchivedTipValidator, */
   createCommentsValidator,
   deleteCommentsValidator,
 
-/*   updateImageTipValidator,
+  /*   updateImageTipValidator,
   updateTipValidator, */
 } from '../middlewares/comments_map.validator'
 
@@ -22,7 +22,7 @@ export const router: Router = Router()
 
 router.get('/search/:q', SeachCommentsController)
 
-/* router.post('/', createCommentsValidator, createCommentsController) */
+router.post('/', createCommentsValidator, createCommentsController)
 router.get('/', findAllCommentsController)
 /* router.put('/:tipId', updateTipValidator, updateTipController) */
 router.delete('/:commentId', deleteCommentsValidator, deleteOneCommentsController)

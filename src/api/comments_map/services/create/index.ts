@@ -2,34 +2,34 @@ import { DataBase } from '../../../../database'
 import moment from 'moment'
 import { CommentsAttributes } from '../../models/comments_map.model'
 
-export const createComments= async ({
-  adminId,
-  key,
-  motivation,
-  path,
-  size,
-  tip,
-  title,
+export const createComments = async ({
+  userId,
+  coment_text,
+  direct_map,
+  lat_direccion,
+  long_direccion,
+  coment_calificacion,
+  coment_motivo,
 }: {
-  adminId: number
-  key: string
-  motivation: string
-  path: string
-  size: string
-  tip: string
-  title: string
-  tip_category_id: number
+  userId: number
+  coment_text: string
+  direct_map: string
+  lat_direccion: string
+  long_direccion: string
+  coment_calificacion: string
+  coment_motivo: string
 }): Promise<CommentsAttributes> => {
   try {
-    return await DataBase.instance.tip.create({
-      created_by: adminId,
+    return await DataBase.instance.commentsMap.create({
+      created_by: userId,
+      id_user: userId,
       created: moment.utc().toDate(),
-      key,
-      motivation,
-      path,
-      size,
-      tip,
-      title,
+      coment_text,
+      direct_map,
+      lat_direccion,
+      long_direccion,
+      coment_calificacion,
+      coment_motivo,
     })
   } catch (err) {
     throw err

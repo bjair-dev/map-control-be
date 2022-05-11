@@ -5,7 +5,7 @@ import { extractFile } from '../../../shared/express.satinizer'
 import { existsTip } from '../validator/comments_map.custom'
 import { findOneTip } from '../services/find/index'
 export const createCommentsValidator = [
-  body('title')
+  body('direct_map')
     .isString()
     .withMessage('Tiene que ser un string')
     .bail()
@@ -13,53 +13,35 @@ export const createCommentsValidator = [
     .isEmpty()
     .withMessage('No puede ser vacio')
     .bail()
-    .isLength({ min: 10, max: 200 })
+    .isLength({ max: 200 })
     .withMessage('Tiene un minimo de 10 letras y maximo de 200'),
-  body('tip')
+  body('lat_direccion')
     .isString()
-    .withMessage('Tiene que se un tip')
+    .withMessage('Tiene que ser una latitud')
     .bail()
     .isLength({ max: 500 })
     .withMessage('Tiene un maximo de 500'),
 
-  body('motivation')
+  body('long_direccion')
     .isString()
-    .withMessage('Tiene que se una motivación')
+    .withMessage('Tiene que ser una longitud')
     .bail()
     .isLength({ max: 500 })
     .withMessage('Tiene un maximo de 500'),
-  body('image')
+
+  body('coment_calificacion')
     .isString()
-    .withMessage('Es una cadena de Base64')
+    .withMessage('Necesitas una calificación')
     .bail()
-    .not()
-    .isEmpty()
-    .withMessage('No puede ser vacio')
+    .isLength({ max: 500 })
+    .withMessage('Tiene un maximo de 500'),
+
+  body('coment_motivo')
+    .isString()
+    .withMessage('Necesitas una motivo')
     .bail()
-    .customSanitizer(extractFile)
-    .isBase64()
-    .withMessage('Tiene que ser una cadena de Base64')
-    .custom(
-      (file, { req }) =>
-        req.mimetype === 'image/jpeg' || req.mimetype === 'image/jpg' || req.mimetype === 'image/png'
-    )
-    .withMessage('Solo se permiten formatos de imagen')
-    .customSanitizer((image: string) => Buffer.from(image, 'base64'))
-    .customSanitizer(async (image: Buffer) => {
-      return await resizeImage({
-        file: image,
-        pngOptions: {
-          compressionLevel: 9,
-        },
-        resizeOptions: {
-          width: 300,
-          height: 300,
-          fit: 'cover',
-        },
-      })
-    })
-    .optional({ nullable: true }),
-  allValidator,
+    .isLength({ max: 500 })
+    .withMessage('Tiene un maximo de 500'),
 ]
 export const deleteCommentsValidator = [
   param('tipId').isNumeric().withMessage('Tiene que ser numerico').bail().custom(existsTip),

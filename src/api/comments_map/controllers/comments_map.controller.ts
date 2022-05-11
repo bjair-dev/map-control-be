@@ -1,26 +1,19 @@
 import { NextFunction, Request, Response } from 'express'
 import sequelize from 'sequelize'
 import createError from 'http-errors'
-/* import { createCommentsService } from '../services/comments_map.service' */
+import { createCommentsService } from '../services/comments_map.service'
 import { IToken } from '../../auth/passport/passport'
 import { CommentsAttributes } from '../models/comments_map.model'
 import { findAllComments, SearchComments } from '../services/find'
 import { updateTip } from '../services/update/index'
 import { deleteOneTip } from '../services/delete'
 
-
-
-export const SeachCommentsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const SeachCommentsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    
     const { q } = req.params
-    
-    const regex = q.split(" ").join("|")
-    
+
+    const regex = q.split(' ').join('|')
+
     const list = await SearchComments({
       regex,
       order: [['id', 'DESC']],
@@ -32,41 +25,31 @@ export const SeachCommentsController = async (
   }
 }
 
-
-
-/* export const createCommentsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const createCommentsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
-    const { tip, motivation, title, tip_category_id } = req.body
+    const { coment_text, direct_map, lat_direccion, long_direccion, coment_calificacion, coment_motivo } =
+      req.body
 
-    const image = req.body.image as Buffer
-
-    const _tip = await createCommentsService({
-      adminId: user.userId,
-      image,
-      tip: {
-        tip,
-        motivation,
-        title,
-        tip_category_id,
+    const _comment = await createCommentsService({
+      userId: user.userId,
+      comment: {
+        coment_text,
+        direct_map,
+        lat_direccion,
+        long_direccion,
+        coment_calificacion,
+        coment_motivo,
       },
     })
-    res.status(200).json(_tip)
+    res.status(200).json(_comment)
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err))
 
     next(createError(404, err))
   }
-} */
-export const findAllCommentsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+}
+export const findAllCommentsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const comments = await findAllComments()
     res.status(200).json(comments)
@@ -140,11 +123,7 @@ export const archivedTipController = async (
     next(createError(404, err))
   }
 } */
-export const deleteOneCommentsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const deleteOneCommentsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await deleteOneTip(Number(req.params.commentsId))
     res.status(200).json('¡Se elimino correctamente!')

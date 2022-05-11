@@ -55,12 +55,21 @@ export const SearchComments = async ({ regex, order }: { regex?: string; order: 
   }
 }
 
-export const findAllComments = async () =>{
-
+export const findAllComments = async () => {
   try {
     const _prov = await DataBase.instance.commentsMap.findAll({
       attributes: {
-        include: ['id', 'coment_text','id_user','coment_calificacion','coment_motivo','created','updated'],
+        include: [
+          'id',
+          'coment_text',
+          'id_user',
+          'coment_calificacion',
+          'lat_direccion',
+          'long_direccion',
+          'coment_motivo',
+          'created',
+          'updated',
+        ],
       },
       include: [
         {
@@ -68,7 +77,7 @@ export const findAllComments = async () =>{
           as: 'user',
           required: true,
           attributes: {
-            include: ['id', 'name','lastname'],
+            include: ['id', 'name', 'lastname'],
           },
         },
       ],
@@ -79,14 +88,16 @@ export const findAllComments = async () =>{
     throw err
   }
 
- /*  try {
+  /*  try {
     return await DataBase.instance.commentsMap.findAll()
   } catch (err) {
     throw err
   } */
 }
-export const findOneTip = async (where: WhereOptions<CommentsAttributes>): Promise<CommentsAttributes | undefined> => {
-/*   try {
+export const findOneTip = async (
+  where: WhereOptions<CommentsAttributes>
+): Promise<CommentsAttributes | undefined> => {
+  /*   try {
     const _prov = await DataBase.instance.commentsMap.findAll({
       attributes: {
         include: ['id', 'coment_text'],
@@ -108,9 +119,7 @@ export const findOneTip = async (where: WhereOptions<CommentsAttributes>): Promi
     throw err
   }
  */
- try {
-   
-
+  try {
     return (
       await DataBase.instance.tip.findOne({
         where,
@@ -118,7 +127,7 @@ export const findOneTip = async (where: WhereOptions<CommentsAttributes>): Promi
     )?.get({ plain: true })
   } catch (err) {
     throw err
-  } 
+  }
 }
 export const FilterTips = async (ids_tips: Array<number>, tip_category_id: number) => {
   try {

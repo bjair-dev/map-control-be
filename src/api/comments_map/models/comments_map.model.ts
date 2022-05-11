@@ -2,12 +2,17 @@ import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize'
 
 export interface CommentsAttributes {
   id?: number
+  created?: Date
+  updated?: Date
   coment_text?: string
   direct_map?: string
   id_user?: number
+  lat_direccion?: string
+  long_direccion?: string
   coment_calificacion?: string
   coment_motivo?: string
-  
+  created_by?: number
+  updated_by?: number
 
   /* '$package.id$'?: number */
 }
@@ -28,7 +33,7 @@ export function CommentsFactory(sequelize: Sequelize): CommentsStatic {
         primaryKey: true,
         autoIncrement: true,
       },
-   
+
       coment_text: {
         type: DataTypes.TEXT,
         allowNull: false,
@@ -37,10 +42,17 @@ export function CommentsFactory(sequelize: Sequelize): CommentsStatic {
         type: DataTypes.STRING(500),
         allowNull: false,
       },
-      id_user:{
+      lat_direccion: {
+        type: DataTypes.STRING(90),
+        allowNull: false,
+      },
+      long_direccion: {
+        type: DataTypes.STRING(90),
+        allowNull: false,
+      },
+      id_user: {
         type: DataTypes.INTEGER,
-        allowNull:false,
-        
+        allowNull: false,
       },
       coment_calificacion: {
         type: DataTypes.STRING(55),
@@ -49,6 +61,22 @@ export function CommentsFactory(sequelize: Sequelize): CommentsStatic {
       coment_motivo: {
         type: DataTypes.STRING(55),
         allowNull: false,
+      },
+      created: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updated: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
+      created_by: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      updated_by: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       },
     },
     {
