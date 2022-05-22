@@ -1,19 +1,21 @@
-import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize'
+import { BuildOptions, DataTypes, Model, Sequelize } from "sequelize";
 
 export interface ColorTypeAttributes {
-  id?: number
-  color: string
+  id?: number;
+  color: string;
 }
-export interface ColorTypeModel extends Model<ColorTypeAttributes>, ColorTypeAttributes {}
+export interface ColorTypeModel
+  extends Model<ColorTypeAttributes>,
+    ColorTypeAttributes {}
 export class ColorType extends Model<ColorTypeModel, ColorTypeAttributes> {}
 
 export type ColorTypeStatic = typeof Model & {
-  new (values?: object, options?: BuildOptions): ColorTypeModel
-}
+  new (values?: object, options?: BuildOptions): ColorTypeModel;
+};
 
 export function ColorTypeFactory(sequelize: Sequelize): ColorTypeStatic {
   return <ColorTypeStatic>sequelize.define(
-    'color_map',
+    "color_map",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -27,9 +29,9 @@ export function ColorTypeFactory(sequelize: Sequelize): ColorTypeStatic {
       },
     },
     {
-      initialAutoIncrement: '1',
-      tableName: 'color_map',
+      initialAutoIncrement: "1",
+      tableName: "color_map",
       timestamps: false,
     }
-  )
+  );
 }
