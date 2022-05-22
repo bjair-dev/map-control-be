@@ -1,35 +1,54 @@
-import { NextFunction, Request, Response } from 'express'
-import sequelize from 'sequelize'
-import createError from 'http-errors'
-import { createCommentsService } from '../services/comments_map.service'
-import { IToken } from '../../auth/passport/passport'
-import { CommentsAttributes } from '../models/comments_map.model'
-import { findAllComments, SearchComments } from '../services/find'
-import { updateTip } from '../services/update/index'
-import { deleteOneTip } from '../services/delete'
+import { NextFunction, Request, Response } from "express";
+import sequelize from "sequelize";
+import createError from "http-errors";
+import { createCommentsService } from "../services/comments_map.service";
+import { IToken } from "../../auth/passport/passport";
+import { CommentsAttributes } from "../models/comments_map.model";
+import {
+  findAllComments,
+  findAllCommentsAll,
+  SearchComments,
+} from "../services/find";
+import { updateTip } from "../services/update/index";
+import { deleteOneTip } from "../services/delete";
+import { DataBase } from "../../../database";
 
-export const SeachCommentsController = async (req: Request, res: Response, next: NextFunction) => {
+export const SeachCommentsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const { q } = req.params
+    const { q } = req.params;
 
-    const regex = q.split(' ').join('|')
+    const regex = q.split(" ").join("|");
 
     const list = await SearchComments({
       regex,
-      order: [['id', 'DESC']],
-    })
-    res.status(200).json(list)
+      order: [["id", "DESC"]],
+    });
+    res.status(200).json(list);
   } catch (err: any) {
-    if (err instanceof sequelize.ValidationError) next(createError(400, err))
-    next(createError(404, err))
+    if (err instanceof sequelize.ValidationError) next(createError(400, err));
+    next(createError(404, err));
   }
-}
+};
 
-export const createCommentsController = async (req: Request, res: Response, next: NextFunction) => {
+export const createCommentsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const user = req.user as IToken
-    const { coment_text, direct_map, lat_direccion, long_direccion, coment_calificacion, coment_motivo } =
-      req.body
+    const user = req.user as IToken;
+    const {
+      coment_text,
+      direct_map,
+      lat_direccion,
+      long_direccion,
+      coment_calificacion,
+      coment_motivo,
+    } = req.body;
 
     const _comment = await createCommentsService({
       userId: user.userId,
@@ -41,24 +60,88 @@ export const createCommentsController = async (req: Request, res: Response, next
         coment_calificacion,
         coment_motivo,
       },
-    })
-    res.status(200).json(_comment)
+    });
+    res.status(200).json(_comment);
   } catch (err: any) {
-    if (err instanceof sequelize.ValidationError) next(createError(400, err))
+    if (err instanceof sequelize.ValidationError) next(createError(400, err));
 
-    next(createError(404, err))
+    next(createError(404, err));
   }
-}
-export const findAllCommentsController = async (req: Request, res: Response, next: NextFunction) => {
+};
+export const findAllCommentsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const comments = await findAllComments()
-    res.status(200).json(comments)
+    /*     const comments = await findAllComments()
+    res.status(200).json(comments) */
+    const comments = await findAllComments({
+      where: {
+        direct_map: String(req.body.direct_map),
+        /*     long_direccion: String(req.query.long_direccion), */
+      },
+      attributes: {
+        include: [
+          "id",
+          "coment_text",
+          "direct_map",
+          "id_user",
+          "coment_calificacion",
+          "lat_direccion",
+          "long_direccion",
+          "coment_motivo",
+          "created",
+          "updated",
+        ],
+        exclude: ["updated_by", "created_by", "state"],
+      },
+    });
+    res.status(200).json(comments);
   } catch (err: any) {
-    if (err instanceof sequelize.ValidationError) next(createError(400, err))
+    if (err instanceof sequelize.ValidationError) next(createError(400, err));
 
-    next(createError(404, err))
+    next(createError(404, err));
   }
-}
+};
+
+export const findAllCommentsAllController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    /*  const comments = await findAllCommentsAll() */
+
+    const useHours: any = await new DataBase().sequelize.query(
+      `
+      Select lat_direccion,long_direccion,count(*) as valoracion,
+      CASE
+     WHEN lat_direccion = '13.0754105' AND long_direccion = '-77.1293184' THEN 'yellow'
+     WHEN lat_direccion = '-13.0754252' AND long_direccion = '-76.3789549' THEN 'green'
+     WHEN lat_direccion = '-13.0754253' AND long_direccion = '-76.3789549' THEN 'red'
+     WHEN lat_direccion = '-13.0754105' AND long_direccion = '-76.378954' THEN 'blue'
+     WHEN lat_direccion = '-12.058624' AND long_direccion = '-77.1293184' THEN 'yellow'
+     
+     Else 'sin color'
+     END AS color
+     from comments_map
+     GROUP BY lat_direccion,long_direccion
+
+   `,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    res.status(200).json(useHours);
+  } catch (err: any) {
+    if (err instanceof sequelize.ValidationError) next(createError(400, err));
+
+    next(createError(404, err));
+  }
+};
+
 /* export const updateTipController = async (
   req: Request,
   res: Response,
@@ -123,13 +206,17 @@ export const archivedTipController = async (
     next(createError(404, err))
   }
 } */
-export const deleteOneCommentsController = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteOneCommentsController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    await deleteOneTip(Number(req.params.commentsId))
-    res.status(200).json('¡Se elimino correctamente!')
+    await deleteOneTip(Number(req.params.commentsId));
+    res.status(200).json("¡Se elimino correctamente!");
   } catch (err: any) {
-    if (err instanceof sequelize.ValidationError) next(createError(400, err))
+    if (err instanceof sequelize.ValidationError) next(createError(400, err));
 
-    next(createError(404, err))
+    next(createError(404, err));
   }
-}
+};

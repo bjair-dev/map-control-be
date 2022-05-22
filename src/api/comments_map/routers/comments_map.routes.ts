@@ -4,6 +4,7 @@ import {
   /* archivedTipController, */
   createCommentsController,
   deleteOneCommentsController,
+  findAllCommentsAllController,
   findAllCommentsController,
   SeachCommentsController,
   /*   updateImageTipServiceController, */
@@ -23,7 +24,9 @@ export const router: Router = Router()
 router.get('/search/:q', SeachCommentsController)
 
 router.post('/', createCommentsValidator, createCommentsController)
-router.get('/', findAllCommentsController)
+router.post('/getAll', findAllCommentsController)
+router.get('/', findAllCommentsAllController)
+
 /* router.put('/:tipId', updateTipValidator, updateTipController) */
 router.delete('/:commentId', deleteCommentsValidator, deleteOneCommentsController)
 /* router.put('/:tipId/image', updateImageTipValidator, updateImageTipServiceController)

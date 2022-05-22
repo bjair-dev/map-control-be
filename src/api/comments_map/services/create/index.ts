@@ -14,8 +14,8 @@ export const createComments = async ({
   userId: number
   coment_text: string
   direct_map: string
-  lat_direccion: string
-  long_direccion: string
+  lat_direccion: number
+  long_direccion: number
   coment_calificacion: string
   coment_motivo: string
 }): Promise<CommentsAttributes> => {

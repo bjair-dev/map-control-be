@@ -1,18 +1,27 @@
-import { DataBase } from '../../../../database'
-import { CommentsModel, CommentsAttributes } from '../../models/comments_map.model'
-import { Op, Order, WhereOptions } from 'sequelize'
-import { FindAttributeOptions } from 'sequelize/types'
-import { LoginTicket } from 'google-auth-library'
+import { DataBase } from "../../../../database";
+import {
+  CommentsModel,
+  CommentsAttributes,
+} from "../../models/comments_map.model";
+import { Op, Order, WhereOptions } from "sequelize";
+import { FindAttributeOptions } from "sequelize/types";
+import { LoginTicket } from "google-auth-library";
 
 export interface IFindAllTips {
-  page: number
-  rows: CommentsModel[]
-  count: number
+  page: number;
+  rows: CommentsModel[];
+  count: number;
 }
 
-export const SearchComments = async ({ regex, order }: { regex?: string; order: Order }) => {
+export const SearchComments = async ({
+  regex,
+  order,
+}: {
+  regex?: string;
+  order: Order;
+}) => {
   try {
-    const limit: number = 12
+    const limit: number = 12;
     const tips = await DataBase.instance.tip.findAll({
       where: {
         state: true,
@@ -29,13 +38,13 @@ export const SearchComments = async ({ regex, order }: { regex?: string; order: 
           tip: {
             [Op.regexp]: regex,
           },
-          '$tip_category.category$': { [Op.regexp]: regex },
+          "$tip_category.category$": { [Op.regexp]: regex },
         },
       },
       include: [
         {
           model: DataBase.instance.tipCategory,
-          attributes: ['id', 'category'],
+          attributes: ["id", "category"],
           required: true,
           // where:{
           //   category:{
@@ -44,21 +53,73 @@ export const SearchComments = async ({ regex, order }: { regex?: string; order: 
           // }
         },
       ],
-      attributes: ['title', 'tip', 'motivation', 'tip', 'id', 'tip_category_id', 'size', 'key', 'path'],
+      attributes: [
+        "title",
+        "tip",
+        "motivation",
+        "tip",
+        "id",
+        "tip_category_id",
+        "size",
+        "key",
+        "path",
+      ],
       order,
       limit,
       // logging:console.log
-    })
-    return tips
+    });
+    return tips;
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 
-export const findAllComments = async () => {
+export const findAllCommentsAll = async () => {
   try {
     const _prov = await DataBase.instance.commentsMap.findAll({
       attributes: {
+        include: [
+          "id",
+          "coment_text",
+          "id_user",
+          "coment_calificacion",
+          "lat_direccion",
+          "long_direccion",
+          "coment_motivo",
+          "created",
+          "updated",
+        ],
+      },
+      include: [
+        {
+          model: DataBase.instance.user,
+          as: "user",
+          required: true,
+          attributes: {
+            include: ["id", "name", "lastname"],
+          },
+        },
+      ],
+      order: [["id", "ASC"]],
+    });
+    return _prov;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const findAllComments = async ({
+  where,
+  attributes,
+}: {
+  where: WhereOptions<CommentsAttributes>;
+  attributes?: FindAttributeOptions;
+}): Promise<any> => {
+  try {
+    const _prov = await DataBase.instance.commentsMap.findAll({
+      where,
+      attributes,
+      /*   attributes: {
         include: [
           'id',
           'coment_text',
@@ -70,22 +131,23 @@ export const findAllComments = async () => {
           'created',
           'updated',
         ],
-      },
+      }, */
+      order: [["id", "DESC"]],
+
       include: [
         {
           model: DataBase.instance.user,
-          as: 'user',
+          as: "user",
           required: true,
           attributes: {
-            include: ['id', 'name', 'lastname'],
+            include: ["id", "name", "lastname"],
           },
         },
       ],
-      order: [['id', 'ASC']],
-    })
-    return _prov
+    });
+    return _prov;
   } catch (err) {
-    throw err
+    throw err;
   }
 
   /*  try {
@@ -93,7 +155,7 @@ export const findAllComments = async () => {
   } catch (err) {
     throw err
   } */
-}
+};
 export const findOneTip = async (
   where: WhereOptions<CommentsAttributes>
 ): Promise<CommentsAttributes | undefined> => {
@@ -124,12 +186,15 @@ export const findOneTip = async (
       await DataBase.instance.tip.findOne({
         where,
       })
-    )?.get({ plain: true })
+    )?.get({ plain: true });
   } catch (err) {
-    throw err
+    throw err;
   }
-}
-export const FilterTips = async (ids_tips: Array<number>, tip_category_id: number) => {
+};
+export const FilterTips = async (
+  ids_tips: Array<number>,
+  tip_category_id: number
+) => {
   try {
     const tips = await DataBase.instance.tip.findAll({
       where: {
@@ -142,7 +207,7 @@ export const FilterTips = async (ids_tips: Array<number>, tip_category_id: numbe
         {
           model: DataBase.instance.tipCategory,
           attributes: {
-            exclude: ['updated_by', 'created_by', 'updated', 'created'],
+            exclude: ["updated_by", "created_by", "updated", "created"],
           },
           where: {
             id: tip_category_id,
@@ -150,23 +215,31 @@ export const FilterTips = async (ids_tips: Array<number>, tip_category_id: numbe
         },
       ],
       attributes: {
-        exclude: ['size', 'created_by', 'updated_by', 'updated', 'created', 'key', 'tip_category_id'],
+        exclude: [
+          "size",
+          "created_by",
+          "updated_by",
+          "updated",
+          "created",
+          "key",
+          "tip_category_id",
+        ],
       },
       logging: console.log,
-    })
+    });
 
-    return tips
+    return tips;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 export const getFindIdsTips = async ({
   map_content_id_metrics,
   tip_category_id,
 }: {
-  map_content_id_metrics: any
-  tip_category_id: number
+  map_content_id_metrics: any;
+  tip_category_id: number;
 }): Promise<CommentsAttributes[]> => {
   try {
     const tips: CommentsAttributes[] = await DataBase.instance.tip.findAll({
@@ -176,10 +249,10 @@ export const getFindIdsTips = async ({
         },
         tip_category_id,
       },
-      attributes: ['id'],
-    })
-    return tips
+      attributes: ["id"],
+    });
+    return tips;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};

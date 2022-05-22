@@ -8,19 +8,12 @@ import { findAllTips, SearchTip } from '../services/find'
 import { updateTip } from '../services/update/index'
 import { deleteOneTip } from '../services/delete'
 
-
-
-export const SeachTipsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const SeachTipsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    
     const { q } = req.params
-    
-    const regex = q.split(" ").join("|")
-    
+
+    const regex = q.split(' ').join('|')
+
     const list = await SearchTip({
       regex,
       order: [['id', 'DESC']],
@@ -32,13 +25,7 @@ export const SeachTipsController = async (
   }
 }
 
-
-
-export const createTipController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const createTipController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
     const { tip, motivation, title, tip_category_id } = req.body
@@ -62,11 +49,7 @@ export const createTipController = async (
     next(createError(404, err))
   }
 }
-export const findAllTipsController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const findAllTipsController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tips = await findAllTips({
       page: Number(req.query.page),
@@ -74,17 +57,7 @@ export const findAllTipsController = async (
         state: Number(req.query.state),
       },
       attributes: {
-        include: [
-          'id',
-          'title',
-          'tip',
-          'motivation',
-          'created',
-          'updated',
-          'path',
-          'key',
-          'size',
-        ],
+        include: ['id', 'title', 'tip', 'motivation', 'created', 'updated', 'path', 'key', 'size'],
         exclude: ['updated_by', 'created_by', 'state', 'tip_category_id'],
       },
     })
@@ -95,11 +68,7 @@ export const findAllTipsController = async (
     next(createError(404, err))
   }
 }
-export const updateTipController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const updateTipController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
     const { motivation, tip, title, tip_category_id } = req.body
@@ -118,11 +87,7 @@ export const updateTipController = async (
     next(createError(404, err))
   }
 }
-export const updateImageTipServiceController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const updateImageTipServiceController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
 
@@ -139,11 +104,7 @@ export const updateImageTipServiceController = async (
   }
 }
 //*DESC Archived or Unarchived the tips
-export const archivedTipController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const archivedTipController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.user as IToken
 
@@ -159,11 +120,7 @@ export const archivedTipController = async (
     next(createError(404, err))
   }
 }
-export const deleteOneTipController = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const deleteOneTipController = async (req: Request, res: Response, next: NextFunction) => {
   try {
     await deleteOneTip(Number(req.params.tipId))
     res.status(200).json('¡Se elimino correctamente!')

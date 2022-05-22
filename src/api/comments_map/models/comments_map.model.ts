@@ -7,8 +7,8 @@ export interface CommentsAttributes {
   coment_text?: string
   direct_map?: string
   id_user?: number
-  lat_direccion?: string
-  long_direccion?: string
+  lat_direccion?: number
+  long_direccion?: number
   coment_calificacion?: string
   coment_motivo?: string
   created_by?: number
@@ -43,11 +43,11 @@ export function CommentsFactory(sequelize: Sequelize): CommentsStatic {
         allowNull: false,
       },
       lat_direccion: {
-        type: DataTypes.STRING(90),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       long_direccion: {
-        type: DataTypes.STRING(90),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       id_user: {
