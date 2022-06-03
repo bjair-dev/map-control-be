@@ -39,9 +39,7 @@ import {
 } from "../middlewares/auth.validator";
 
 export const router: Router = Router();
-router.get("/departamentou", findAllDepartamentoTypeController);
-router.get("/provinciau", findAllProvinciaController);
-router.get("/distritou", findAllDistritoController);
+
 router.post("/signup", signupValidator, signUpController);
 router.post("/signin", signinValidator, signInController);
 router.post("/signin-google", googleSignInController);

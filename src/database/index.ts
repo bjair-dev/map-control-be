@@ -4,13 +4,13 @@ import { UserFactory, UserStatic } from "../api/user/models/user.model";
 import { TokenStatic, TokenFactory } from "../api/token/models/token.model";
 
 import { AdminFactory, AdminStatic } from "../api/admin/models/admin.model";
-
+/* 
 import {
   userHasManyProvincia,
   userHasManyDistrito,
   userHasManyDepartamento,
   //  , userHasManyEntryType
-} from "./associations/user";
+} from "./associations/user"; */
 import { adminHasManyAdminRoles } from "./associations/admin";
 
 import {
@@ -152,7 +152,7 @@ export class DataBase {
       .catch((err) => console.log(err));
   }
   private associations(): void {
-    userHasManyDepartamento({
+    /*     userHasManyDepartamento({
       departamento: this.departamento,
       user: this.user,
     });
@@ -175,7 +175,7 @@ export class DataBase {
     userHasManyDistrito({
       distrito: this.distrito,
       user: this.user,
-    });
+    }); */
     commentsHasManyUser({
       comments: this.commentsMap,
       user: this.user,
@@ -199,20 +199,20 @@ export class DataBase {
       distrito: this.distrito,
     });
 
-    noticiaHasManyDepartamento({
+    /*     noticiaHasManyDepartamento({
       departamento: this.departamento,
       noticia: this.noticia,
-    });
+    }); */
 
-    noticiaHasManyProvincia({
+    /*   noticiaHasManyProvincia({
       provincia: this.provincia,
       noticia: this.noticia,
     });
-
-    noticiaHasManyDistrito({
+ */
+    /*     noticiaHasManyDistrito({
       distrito: this.distrito,
       noticia: this.noticia,
-    });
+    }); */
 
     tipCategoryHasManyTip({
       tip: this.tip,

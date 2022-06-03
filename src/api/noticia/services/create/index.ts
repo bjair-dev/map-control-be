@@ -1,6 +1,6 @@
-import { DataBase } from '../../../../database'
-import moment from 'moment'
-import { NoticiaAttributes } from '../../models/noticia.model'
+import { DataBase } from "../../../../database";
+import moment from "moment";
+import { NoticiaAttributes } from "../../models/noticia.model";
 
 export const createNoticia = async ({
   adminId,
@@ -9,20 +9,26 @@ export const createNoticia = async ({
   size,
   title,
   titular,
-  region_id,
-  prov_id,
-  distrito_id,
+  code_departamento,
+  code_provincia,
+  ubigeo,
+  name_departamento,
+  name_provincia,
+  name_distrito,
 }: {
-  adminId: number
-  key: string
-  path: string
-  size: string
-  title: string
-  titular: string
+  adminId: number;
+  key: string;
+  path: string;
+  size: string;
+  title: string;
+  titular: string;
 
-  region_id: number
-  prov_id: number
-  distrito_id: number
+  code_departamento: number;
+  code_provincia: number;
+  ubigeo: number;
+  name_departamento?: string;
+  name_provincia?: string;
+  name_distrito?: string;
 }): Promise<NoticiaAttributes> => {
   try {
     return await DataBase.instance.noticia.create({
@@ -33,11 +39,14 @@ export const createNoticia = async ({
       size,
       title,
       titular,
-      region_id,
-      prov_id,
-      distrito_id,
-    })
+      code_departamento,
+      code_provincia,
+      ubigeo,
+      name_departamento,
+      name_provincia,
+      name_distrito,
+    });
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};

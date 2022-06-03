@@ -1,47 +1,55 @@
-import { DataBase } from '../../../../database'
-import moment from 'moment'
-import { WhereOptions } from 'sequelize/types'
-import { UserAttributes } from '../../models/user.model'
+import { DataBase } from "../../../../database";
+import moment from "moment";
+import { WhereOptions } from "sequelize/types";
+import { UserAttributes } from "../../models/user.model";
 // import { UserAttributes } from '../../models/user.model'
 
-export const desbloqueoTiempo = async ({ userId }: { userId?: number }): Promise<any> => {
+export const desbloqueoTiempo = async ({
+  userId,
+}: {
+  userId?: number;
+}): Promise<any> => {
   try {
     return await DataBase.instance.user.update(
       {
         numIntentos: 0,
-        status: 'H',
+        status: "H",
       },
       {
         where: { id: userId },
       }
-    )
+    );
   } catch (err) {
-    throw err
+    throw err;
   }
-}
-export const desbloqueoUsuario = async ({ userId }: { userId?: number }): Promise<any> => {
+};
+export const desbloqueoUsuario = async ({
+  userId,
+}: {
+  userId?: number;
+}): Promise<any> => {
   try {
     return await DataBase.instance.user.update(
       {
         hora_bloqueo: undefined,
         cantidad_min_bloqueado: undefined,
         numIntentos: 0,
-        status: 'H',
+        status: "H",
       },
       {
         where: { id: userId },
       }
-    )
+    );
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 export const actualizarNumIntentos = async ({
   userId,
   numIntentos,
 }: {
-  userId?: number
-  numIntentos?: number
+  userId?: number;
+  numIntentos?: number;
 }): Promise<any> => {
   try {
     return await DataBase.instance.user.update(
@@ -51,47 +59,51 @@ export const actualizarNumIntentos = async ({
       {
         where: { id: userId },
       }
-    )
+    );
   } catch (err) {
-    throw err
+    throw err;
   }
-}
-export const bloqueoUsuario = async ({ userId }: { userId?: number }): Promise<any> => {
+};
+export const bloqueoUsuario = async ({
+  userId,
+}: {
+  userId?: number;
+}): Promise<any> => {
   try {
     return await DataBase.instance.user.update(
       {
-        status: 'BI', //* BI == BLOQUEO
+        status: "BI", //* BI == BLOQUEO
       },
       {
         where: { id: userId },
       }
-    )
+    );
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 export const bloqueoUsuarioTemporal = async ({
   userId,
   cantminutos,
 }: {
-  userId?: number
-  cantminutos?: number
+  userId?: number;
+  cantminutos?: number;
 }): Promise<any> => {
   try {
     return await DataBase.instance.user.update(
       {
         hora_bloqueo: new Date(),
         cantidad_min_bloqueado: cantminutos,
-        status: 'BIT',
+        status: "BIT",
       },
       {
         where: { id: userId },
       }
-    )
+    );
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 export const updateUserById = async ({
   id,
   number_of_sessions,
@@ -100,12 +112,12 @@ export const updateUserById = async ({
   lastname,
   nightmode,
 }: {
-  id?: number
-  number_of_sessions?: number
-  cellphone?: number
-  name?: string
-  lastname?: string
-  nightmode?: boolean
+  id?: number;
+  number_of_sessions?: number;
+  cellphone?: number;
+  name?: string;
+  lastname?: string;
+  nightmode?: boolean;
 }): Promise<any> => {
   try {
     return await DataBase.instance.user.update(
@@ -123,18 +135,18 @@ export const updateUserById = async ({
           state: true,
         },
       }
-    )
+    );
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 
 export const updateUserStateCodeVerification = async ({
   state,
   email,
 }: {
-  state: boolean
-  email: string
+  state: boolean;
+  email: string;
 }): Promise<any> => {
   return await DataBase.instance.user.update(
     {
@@ -145,23 +157,23 @@ export const updateUserStateCodeVerification = async ({
         email,
       },
     }
-  )
-}
+  );
+};
 
 export const updateUser = async ({
   where,
   user,
 }: {
-  where: WhereOptions<UserAttributes>
-  user: UserAttributes
+  where: WhereOptions<UserAttributes>;
+  user: UserAttributes;
 }): Promise<any> => {
   return await DataBase.instance.user.update(
     { ...user },
     {
       where,
     }
-  )
-}
+  );
+};
 
 export const updateIdDevice = async (device_id: string, userId: number) => {
   try {
@@ -174,13 +186,13 @@ export const updateIdDevice = async (device_id: string, userId: number) => {
       {
         where: { id: userId },
       }
-    )
+    );
 
-    return user
+    return user;
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
 
 export const updatePasswordUser = async ({
   where,
@@ -188,10 +200,10 @@ export const updatePasswordUser = async ({
   salt,
   password,
 }: {
-  where: WhereOptions<UserAttributes>
+  where: WhereOptions<UserAttributes>;
   // updated_by?: number
-  salt: string
-  password: string
+  salt: string;
+  password: string;
 }) => {
   try {
     return await DataBase.instance.user.update(
@@ -204,8 +216,59 @@ export const updatePasswordUser = async ({
       {
         where,
       }
-    )
+    );
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};
+
+/* export const updateUser = async ({
+  id,
+  state,
+  key,
+  path,
+  size,
+  code_departamento,
+  code_provincia,
+  ubigeo,
+  name_departamento,
+  name_provincia,
+  name_distrito,
+}: {
+  id: number;
+  state?: boolean;
+  key?: string;
+  path?: string;
+  size?: string;
+  code_departamento?: number;
+  code_provincia?: number;
+  ubigeo?: number;
+  name_departamento?: string;
+  name_provincia?: string;
+  name_distrito?: string;
+}) => {
+  try {
+    return await DataBase.instance.noticia.update(
+      {
+        updated: moment.utc().toDate(),
+        state,
+        key,
+        path,
+        size,
+        code_departamento,
+        code_provincia,
+        ubigeo,
+        name_departamento,
+        name_provincia,
+        name_distrito,
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+  } catch (err) {
+    throw err;
+  }
+}; */

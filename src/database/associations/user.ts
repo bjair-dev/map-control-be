@@ -1,15 +1,13 @@
-import { UserStatic } from '../../api/user/models/user.model'
+import { UserStatic } from "../../api/user/models/user.model";
 
+import { DepartamentoTypeStatic } from "../../api/ubicacion/models/departamento.model";
 
-import { DepartamentoTypeStatic } from '../../api/ubicacion/models/departamento.model'
-
-import { ProvinciaStatic } from '../../api/ubicacion/models/provincia.model'
-import { DistritoStatic } from '../../api/ubicacion/models/distrito.model'
+import { ProvinciaStatic } from "../../api/ubicacion/models/provincia.model";
+import { DistritoStatic } from "../../api/ubicacion/models/distrito.model";
 
 //*@DESC User has many bank accounts
 
 //*@DESC User has many entries
-
 
 //*@DESC User has many entries types
 
@@ -52,7 +50,7 @@ import { DistritoStatic } from '../../api/ubicacion/models/distrito.model'
 // }
 
 //*@DESC User has many entries
-
+/* 
 export const userHasManyDepartamento = ({
   departamento,
   user,
@@ -110,4 +108,4 @@ export const userHasManyDistrito = ({
     targetKey: 'id',
     onDelete: 'CASCADE',
   })
-}
+} */
