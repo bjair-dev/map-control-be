@@ -1,5 +1,5 @@
-import { DataBase } from '../../../../database'
-import moment from 'moment'
+import { DataBase } from "../../../../database";
+import moment from "moment";
 
 export const updateNoticia = async ({
   id,
@@ -10,22 +10,28 @@ export const updateNoticia = async ({
   path,
   size,
   adminId,
-  region_id,
-  prov_id,
-  distrito_id,
+  code_departamento,
+  code_provincia,
+  ubigeo,
+  name_departamento,
+  name_provincia,
+  name_distrito,
 }: {
-  id: number
-  title?: string
-  titular?: string
-  state?: boolean
-  key?: string
-  path?: string
-  size?: string
-  adminId: number
-  region_id?: number
-  prov_id?: number
+  id: number;
+  title?: string;
+  titular?: string;
+  state?: boolean;
+  key?: string;
+  path?: string;
+  size?: string;
+  adminId: number;
+  code_departamento?: number;
+  code_provincia?: number;
 
-  distrito_id?: number
+  ubigeo?: number;
+  name_departamento?: string;
+  name_provincia?: string;
+  name_distrito?: string;
 }) => {
   try {
     return await DataBase.instance.noticia.update(
@@ -38,17 +44,20 @@ export const updateNoticia = async ({
         key,
         path,
         size,
-        region_id,
-        prov_id,
-        distrito_id,
+        code_departamento,
+        code_provincia,
+        ubigeo,
+        name_departamento,
+        name_provincia,
+        name_distrito,
       },
       {
         where: {
           id,
         },
       }
-    )
+    );
   } catch (err) {
-    throw err
+    throw err;
   }
-}
+};

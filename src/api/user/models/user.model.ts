@@ -1,52 +1,56 @@
-import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize'
+import { BuildOptions, DataTypes, Model, Sequelize } from "sequelize";
 
 export interface UserAttributes {
-  id?: number
-  password?: string
-  salt?: string
-  name?: string
-  code_verification?: string
-  date_of_birth?: string
-  lastname?: string
-  email?: string
-  cellphone?: number
-  status?: string
-  numIntentos?: number
-  fechaFinBloqueo?: Date
-  created?: Date
-  updated?: Date
-  dni?: number
-  hora_bloqueo?: Date
-  cantidad_min_bloqueado?: number
-  sexo?: string
-  state?: boolean
-  nightmode?: boolean
-  originalname?: string
-  filename?: string
-  size?: string
-  ext?: string
-  path?: string
-  number_of_sessions?: number
+  id?: number;
+  password?: string;
+  salt?: string;
+  name?: string;
+  code_verification?: string;
+  date_of_birth?: string;
+  lastname?: string;
+  email?: string;
+  cellphone?: number;
+  status?: string;
+  numIntentos?: number;
+  fechaFinBloqueo?: Date;
+  created?: Date;
+  updated?: Date;
+  dni?: number;
+  hora_bloqueo?: Date;
+  cantidad_min_bloqueado?: number;
+  sexo?: string;
+  state?: boolean;
+  nightmode?: boolean;
+  originalname?: string;
+  filename?: string;
+  key?: string;
+  size?: string;
+  ext?: string;
+  path?: string;
+  number_of_sessions?: number;
   //Days of session and date
-  user_session_day?: number
-  date_user_session_day?: Date
-  region_id?: number
-  prov_id?: number
-  distrito_id?: number
-  device_id?: string
-  origin?: string
-  terms_and_conditions?: boolean
+  user_session_day?: number;
+  date_user_session_day?: Date;
+  code_departamento?: number;
+  code_provincia?: number;
+  ubigeo?: number;
+  name_departamento?: string;
+  name_provincia?: string;
+  name_distrito?: string;
+  device_id?: string;
+  origin?: string;
+  terms_and_conditions?: boolean;
 }
 export interface UserModel extends Model<UserAttributes>, UserAttributes {}
 export class User extends Model<UserModel, UserAttributes> {}
 
 export type UserStatic = typeof Model & {
-  new (values?: object, options?: BuildOptions): UserModel
-}
+  new (values?: object, options?: BuildOptions): UserModel;
+};
 
 export function UserFactory(sequelize: Sequelize): UserStatic {
   return <UserStatic>sequelize.define(
-    'user',
+    "user",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -107,7 +111,7 @@ export function UserFactory(sequelize: Sequelize): UserStatic {
       },
       status: {
         type: DataTypes.STRING(100),
-        defaultValue: 'H',
+        defaultValue: "H",
       },
 
       numIntentos: {
@@ -154,45 +158,61 @@ export function UserFactory(sequelize: Sequelize): UserStatic {
         allowNull: true,
       },
       size: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(30),
         allowNull: true,
       },
-      region_id: {
+      code_departamento: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
-      prov_id: {
+      code_provincia: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
       },
-      distrito_id: {
+      ubigeo: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
+      },
+      name_departamento: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
+      },
+      name_provincia: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
+      },
+      name_distrito: {
+        type: DataTypes.STRING(200),
+        allowNull: false,
       },
       ext: {
         type: DataTypes.STRING(10),
         allowNull: true,
       },
+      key: {
+        type: DataTypes.STRING(150),
+        allowNull: false,
+      },
       path: {
-        type: DataTypes.STRING(20),
-        allowNull: true,
+        type: DataTypes.STRING(500),
+        allowNull: false,
       },
       origin: {
         type: DataTypes.STRING(70),
         allowNull: true,
-        defaultValue: 'correo',
+        defaultValue: "correo",
       },
     },
     {
-      initialAutoIncrement: '1',
-      tableName: 'user',
+      initialAutoIncrement: "1",
+      tableName: "user",
       timestamps: false,
       indexes: [
         {
           unique: true,
-          fields: ['email'],
+          fields: ["email"],
         },
       ],
     }
-  )
+  );
 }
