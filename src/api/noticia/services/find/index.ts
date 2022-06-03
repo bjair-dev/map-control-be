@@ -202,3 +202,10 @@ export const getFindIdsTips = async ({
     throw error;
   }
 };
+export const findAllNoticiaNoPage = async () => {
+  try {
+    return await DataBase.instance.noticia.findAll();
+  } catch (err) {
+    throw err;
+  }
+};

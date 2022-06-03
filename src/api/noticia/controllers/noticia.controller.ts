@@ -7,7 +7,11 @@ import {
 } from "../services/noticia.service";
 import { IToken } from "../../auth/passport/passport";
 import { NoticiaAttributes } from "../models/noticia.model";
-import { findAllNoticia, SearchTip } from "../services/find";
+import {
+  findAllNoticia,
+  findAllNoticiaNoPage,
+  SearchTip,
+} from "../services/find";
 import { updateNoticia } from "../services/update/index";
 import { deleteOneNoticia } from "../services/delete";
 
@@ -206,6 +210,20 @@ export const deleteOneNoticiaController = async (
   try {
     await deleteOneNoticia(Number(req.params.noticiaId));
     res.status(200).json("¡Se elimino correctamente!");
+  } catch (err: any) {
+    if (err instanceof sequelize.ValidationError) next(createError(400, err));
+
+    next(createError(404, err));
+  }
+};
+export const findAllNoticiaNoPageController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const roles = await findAllNoticiaNoPage();
+    res.status(200).json(roles);
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err));
 

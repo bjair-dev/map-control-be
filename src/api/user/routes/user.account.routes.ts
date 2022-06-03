@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { findAllNoticiaNoPageController } from "../../noticia/controllers/noticia.controller";
 import {
   findProfileUserController,
   udpateDaySessionUserController,
@@ -27,5 +28,5 @@ router.put(
 );
 router.put("/terms/conditions", updateTermsAndConditionsController);
 router.put("/image", updateImagePerfil, updateImagePerfilServiceController);
-
+router.get("/noticias", findAllNoticiaNoPageController);
 // router.post('/activate', ActiveAccountUserValidator, ActiveAccountUserController)
