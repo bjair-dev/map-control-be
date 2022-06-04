@@ -12,7 +12,7 @@ import { router as routerDepartamentoIntranet } from "./ubicacion/routes/departa
 import { router as routerProvinciaIntranet } from "./ubicacion/routes/provincia.type.routes";
 import { router as routerDistritoIntranet } from "./ubicacion/routes/distrito.type.routes";
 import { router as routerNoticiasIntranet } from "./noticia/routers/noticia.routes";
-
+import { router as routerUserDevice } from "./user/routes/user.device.routes";
 import { router as routerUserAccount } from "./user/routes/user.account.routes";
 import { router as routerCommentsAccount } from "./comments_map/routers/comments_map.routes";
 
@@ -80,6 +80,11 @@ export default class Server {
     // this._router.use('/report', routerReport)
     //*@AUTHENTICATE
     this._router.use(passport.authenticate("jwt", { session: false }));
+    this._router.use(
+      "/updateIdDeviceUser",
+      deniedAccessAdmin,
+      routerUserDevice
+    );
 
     //*@USE USER
 
