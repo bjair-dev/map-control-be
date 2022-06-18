@@ -18,6 +18,7 @@ import path from "path";
 import config from "../../../config/environments";
 import { saveImageInServer } from "../../../shared/save.file";
 import { removeFile } from "../../../shared/remove.file";
+import { createUserNetwork } from "./create/index-network";
 
 export const validateStatusUser = ({
   estado,
@@ -159,7 +160,7 @@ export const updatePasswordUserService = async (
 export const createNewUser = async (user: UserAttributes) => {
   try {
     // const _user: UserAttributes = await createUser(user)
-    return await createUser(user);
+    return await createUserNetwork(user);
   } catch (err) {
     throw err;
   }
