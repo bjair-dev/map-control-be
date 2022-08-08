@@ -222,7 +222,11 @@ export const findAllNoticiaNoPageController = async (
   next: NextFunction
 ) => {
   try {
-    const roles = await findAllNoticiaNoPage();
+    const roles = await findAllNoticiaNoPage({
+      where: {
+        code_departamento: Number(req.query.code_departamento),
+      },
+    });
     res.status(200).json(roles);
   } catch (err: any) {
     if (err instanceof sequelize.ValidationError) next(createError(400, err));

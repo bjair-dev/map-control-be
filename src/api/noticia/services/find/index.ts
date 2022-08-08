@@ -202,9 +202,31 @@ export const getFindIdsTips = async ({
     throw error;
   }
 };
-export const findAllNoticiaNoPage = async () => {
+/* export const findAllNoticiaNoPage = async () => {
+  
   try {
     return await DataBase.instance.noticia.findAll();
+  } catch (err) {
+    throw err;
+  }
+}; */
+
+export const findAllNoticiaNoPage = async ({
+  where,
+  attributes,
+}: {
+  where: WhereOptions<NoticiaAttributes>;
+  attributes?: FindAttributeOptions;
+}): Promise<any> => {
+  try {
+    const _prov = await DataBase.instance.noticia.findAll({
+      where,
+      attributes,
+
+      order: [["id", "ASC"]],
+      group: ["code_provincia"],
+    });
+    return _prov;
   } catch (err) {
     throw err;
   }

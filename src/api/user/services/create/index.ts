@@ -10,7 +10,6 @@ export const createUser = async ({
   cellphone,
   sexo,
   password,
-  dni,
   date_of_birth,
   code_verification,
   state,
@@ -30,7 +29,6 @@ export const createUser = async ({
   cellphone?: number;
   sexo?: string;
   password?: string;
-  dni?: number;
   date_of_birth?: string;
   code_verification?: string;
   state?: boolean;
@@ -66,7 +64,6 @@ export const createUser = async ({
       created: moment.utc().toDate(),
       path: `https://robohash.org/${gen()}?set=set2`,
       sexo,
-      dni,
       date_of_birth,
       code_verification,
       state,

@@ -49,11 +49,11 @@ export const signupValidator = [
     .toLowerCase()
     .isIn(["hombre", "mujer", "no especificado"])
     .withMessage("Solo se eliguen Hombre y Mujer"),
-  body("dni")
+  /*   body("dni")
     .isNumeric()
     .withMessage("Se require el DNI")
     .bail()
-    .isLength({ min: 8, max: 8 }),
+    .isLength({ min: 8, max: 8 }), */
   body("password")
     .isString()
     .withMessage("Se require un string")
@@ -69,19 +69,19 @@ export const signupValidator = [
 
   body("code_departamento")
     .isNumeric()
-    .withMessage("Se require un numero")
+    .withMessage("Se requiere un departamento")
     .bail()
     .optional({ nullable: true }),
 
   body("code_provincia")
     .isNumeric()
-    .withMessage("Se require un numero")
+    .withMessage("Se requiere una provincia")
     .bail()
     .optional({ nullable: true }),
 
   body("ubigeo")
     .isNumeric()
-    .withMessage("Se require un numero")
+    .withMessage("Se requiere un distrito")
     .bail()
     .optional({ nullable: true }),
   // .matches(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)

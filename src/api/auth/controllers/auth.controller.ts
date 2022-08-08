@@ -47,8 +47,6 @@ export const signUpController = async (
       cellphone,
       sexo,
       password,
-      dni,
-
       date_of_birth,
       code_departamento,
       code_provincia,
@@ -56,6 +54,7 @@ export const signUpController = async (
       name_departamento,
       name_provincia,
       name_distrito,
+      key,
     } = req.body;
 
     enum opt {
@@ -81,7 +80,6 @@ export const signUpController = async (
       cellphone,
       sexo,
       password,
-      dni,
       code_verification: code,
       date_of_birth,
       state: false,
@@ -91,6 +89,7 @@ export const signUpController = async (
       name_departamento,
       name_provincia,
       name_distrito,
+      key,
     });
 
     res

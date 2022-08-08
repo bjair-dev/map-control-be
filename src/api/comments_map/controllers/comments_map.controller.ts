@@ -12,6 +12,7 @@ import {
 import { updateTip } from "../services/update/index";
 import { deleteOneTip } from "../services/delete";
 import { DataBase } from "../../../database";
+import { any } from "sequelize/types/lib/operators";
 
 export const SeachCommentsController = async (
   req: Request,
@@ -104,7 +105,6 @@ export const findAllCommentsController = async (
     next(createError(404, err));
   }
 };
-
 export const findAllCommentsAllController = async (
   req: Request,
   res: Response,
@@ -113,26 +113,30 @@ export const findAllCommentsAllController = async (
   try {
     /*  const comments = await findAllCommentsAll() */
 
-    const useHours: any = await new DataBase().sequelize.query(
+    const useHours: any[] = await new DataBase().sequelize.query(
       `
-      Select lat_direccion,long_direccion,count(*) as valoracion,
+      Select lat_direccion,long_direccion ,count(*) as valoracion,
       CASE
-     WHEN lat_direccion = '13.0754105' AND long_direccion = '-77.1293184' THEN 'yellow'
-     WHEN lat_direccion = '-13.0754252' AND long_direccion = '-76.3789549' THEN 'green'
-     WHEN lat_direccion = '-13.0754253' AND long_direccion = '-76.3789549' THEN 'red'
-     WHEN lat_direccion = '-13.0754105' AND long_direccion = '-76.378954' THEN 'blue'
-     WHEN lat_direccion = '-12.058624' AND long_direccion = '-77.1293184' THEN 'yellow'
-     
-     Else 'sin color'
+     WHEN coment_calificacion = 'Califica'  THEN 'green'
+	 WHEN coment_calificacion = 'Reporte'  THEN 'yellow'
+     Else 'sin color'     
      END AS color
      from comments_map
+     
      GROUP BY lat_direccion,long_direccion
-
    `,
       {
         type: sequelize.QueryTypes.SELECT,
       }
     );
+    /*     let a: any = [];
+    useHours.forEach((element, i) => {
+      console.log(i, "indices");
+      let variable = useHours[i];
+      console.log(variable.valoracion, "valo");
+      a = variable.valoracion;
+    });
+    console.log(a, "esto es a"); */
 
     res.status(200).json(useHours);
   } catch (err: any) {
